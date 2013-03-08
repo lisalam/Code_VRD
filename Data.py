@@ -15,25 +15,30 @@ from org.python.core import codecs
 codecs.setDefaultEncoding('utf-8')
 
 
-#**************** Debut de la classe Exemple ******
+#**************** Debut de la classe Data ******
 class Data():
-	""" Ceci est un exemple de base d'une classe"""
+	""" Classe principale des donnees construit tous les dictionnaires au niveau du projet """
 	
-	def __init__(self, projet):	
+	#"init" permet d'initialiser
+	
+	def __init__(self, projet): # le self rend l'action privée, propre au programmeur	
 		self.__projet = projet
-		self.__listboites=self.__getlisteboites()
+		self.__listeboites=self.__getlisteboites() 
 		self.__dicoText = dict()
 		self.__boiteGene = dict()
 		self.__boiteN = dict()
 		self.__boiteB = dict()
 		self.__boitecond = dict()
-
+		
 		print self.__run()		
 
-	def __run(self) :
+# création des dictionnaires vides que l'on va utiliser, dans la fonction init, on aura plus qu'à appeler la fonction pour la faire marcher après
 
+	def __run(self) :
 		if self.__getdicoText() == "erreur dossiers" : return "erreur dossiers"
-		else : self.__dicoText = self.__getdicoText()
+		else : 	self.__dicoText = self.__getdicoText() # dans la fonction run, remplir le dictionnaire si il n'y pas "erreur dossiers"
+
+		self.__GenerateTitre()
 
 		if self.__getboiteGene() == "erreur dossiers" : return "erreur dossiers"
 		else : self.__boiteGene == self.__getboiteGene()
@@ -46,38 +51,38 @@ class Data():
 
 		if self.__getboitecond() == "erreur dossiers" : return "erreur dossiers"
 		else : self.__boitecond == self.__getboitecond()
-		
 
 		return "ok"
 
 
 	def __getboitecond(self):
-		for i in range(len(self.__listboites)):
-			pass
-			#self.__getboitecond[self.__listboites[i]]=listecond
+		for i in range(len(self.__listeboites)):
+			listecond=list()
+			self.__boitecond[self.__listeboites[i]]=listecond # la clé du dictionnaire est le nom de boite et la valeur sont les conditions présentes dans la boite
 
-		
+		return listecond # on retourne la liste des conditions présentes dans la boite que l'on aura appeler 
+
 	
-	def __getboiteN(self):
+	def __getboiteN(self): # la clé est le nom de la boite et la clé est le numéro et le nom de la boite
 		tempdico=dict()
-		for i in range(len(self.__listboites)):
-			boite=self.__listboites[i]
+		for i in range(len(self.__listeboites)): # pour chaque ligne de chaque dossier de mon répertoire
+			boite=self.__listeboites[i] 
 			f=self.__dicoText[boite]
-			fichier=open(f,"r")
-			alllines = fichier.readlines()[0]
-			ligne = alllines.split("\r")[1]
-			ligne = ligne.split("\t")
-			nb = ligne[4]
-			tempdico[boite]=(nb, boite)
-		return tempdico
-
+			fichier=open(f,"r") # ouvrir le fichier en lecture seule
+			alllines = fichier.readlines()[0] # lire chaque ligne du fichier, ici on veut lire que la première ligne
+			ligne = alllines.split("\r")[0] # on coupe la ligne avec "\r"
+			ligne = ligne.split("\t") # on splitte au niveau des tabulations la ligne déjà splittée avant
+			nb = ligne[self.__COL_BOITE]
+			tempdico[boite]=(nb, boite) # le dictionnaire temporaire tempdico a pour clé la boite et pour valeur son numéro et son nom de boite (son nom de fichier)
 		
+		
+		return tempdico
 
 		
 	def __getboiteB(self):
 		tempdico=dict()
-		for i in range(len(self.__listboites)):
-			boite=self.__listboites[i]
+		for i in range(len(self.__listeboites)):
+			boite=self.__listeboites[i]
 			f=self.__dicoText[boite]
 			fichier=open(f,"r")
 			alllines = fichier.readlines()[0]
@@ -85,25 +90,31 @@ class Data():
 			ligne = ligne.split("\t")
 			nb = ligne[4]
 			tempdico[nb]=(nb, boite)
+			
 		return tempdico
 
 
-	def __getdicoText(self) :
+	def __getdicoText(self) : # nom du dossier et chemin du user au fichier texte correspondant au dossier 
 		tempdico=dict()
 		tempboites=os.listdir(self.__projet) # récupération listes de dossiers et des fichiers
 		if len(tempboites)<2 : return "erreur dossiers"
 		listpaths=[os.path.join(self.__projet,v) for v in tempboites if os.path.isdir(os.path.join(self.__projet,v))] # liste en intensions, ne garde que les dossiers et les transforment en "path" complet 
-		for i in range(len(self.__listboites)):
-			mot=os.path.join(listpaths[i],"Texte",(self.__listboites[i]+"_labels.txt"))
+		for i in range(len(self.__listeboites)):
+			mot=os.path.join(listpaths[i],"Texte",(self.__listeboites[i]+"_labels.txt"))
 			if os.path.isfile(mot):
-				tempdico[self.__listboites[i]]=mot
-
-		return tempdico
+				tempdico[self.__listeboites[i]]=mot
+		
+		return tempdico # 
 
 		
 
-	def __getboiteGene(self) :
-		pass
+	def __getboiteGene(self) : # dictionnaire qui au nom de la boite sort tous les gènes contenus dans cette boite
+		for i in range(len(self.__listeboites)):
+			listegenes=list()
+			self.__boiteGene[self.__listeboites[i]]=listegenes
+
+		return listegenes
+			
 
 	def __getDicoLignes(self, boite) :
 		f = self.__dicoText[boite]
@@ -111,20 +122,40 @@ class Data():
 		alllines=fichier.readlines() # lire toutes les lignes du fichier
 		alllines=alllines[0].split("\r") # on veut lire la première ligne [0] et séparer les éléments de la ligne (ici le fichier excel fait que l'on a qu'une ligne dans tout le fichier)
 		dicoligne=dict() # création d'un dictionnaire pour les lignes
-		for i in range(1,len(alllines)): # boucle avec index
+		for i in range(0,len(alllines)): # boucle avec index
 			ligne=alllines[i].split("\t")
 			dicoligne[i]=ligne # ligne est une liste pour laquelle chaque valeur est une des colonnes du fichier texte initial
-
-		return dicoligne
+			
+		return dicoligne # renvoi un dictionaire pour boite donnée avec toute les lignes sous forme de liste du fichier texte, la clé est le n° de ligne
 
 	def __getlisteboites(self):
 		tempboites=os.listdir(self.__projet) # récupération listes de dossiers et des fichiers
-		listboites=[v for v in tempboites if os.path.isdir(os.path.join (self.__projet,v))] # tous les dossiers de mon répertoire
-		return listboites
+		listeboites=[v for v in tempboites if os.path.isdir(os.path.join (self.__projet,v))] # tous les dossiers de mon répertoire
+		
+		return listeboites
+
+
+	def __GenerateTitre(self): # création de constantes qui seront fixes, pour pas appeler à chaque fois le numéro de la colonne qui nous interesse
+		dicoligne = self.__getDicoLignes(self.__listeboites[0])
+		titre=dicoligne[0]
+		for i in range(len(titre)):
+			if titre[i]=="Boite": self.__COL_BOITE = i
+			if titre[i]=="Genes": self.__COL_GENES = i
+			if titre[i]=="Dossier": self.__COL_DOSSIER = i
+			if titre[i]=="Well": self.__COL_WELL = i
+			if titre[i]=="Col": self.__COL_COL = i
+			if titre[i]=="Ligne": self.__COL_LIGNE = i
+			if titre[i]=="Condition": self.__COL_CONDITION = i
+			if titre[i]=="N image": self.__COL_NIMAGE = i
+			if titre[i]=="CanalID": self.__COL_CANALID = i
+			if titre[i]=="CanalInt": self.__COL_CANALINT = i
+				
+				
+				
 	
 
 	
-#**************** Fin de la classe Exemple ******
+#**************** Fin de la classe Data ******
 
 
 # ----------------------------------------------------------------------------
