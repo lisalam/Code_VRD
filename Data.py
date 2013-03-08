@@ -23,7 +23,6 @@ class Data():
 	
 	def __init__(self, projet): # le self rend l'action privée, propre au programmeur	
 		self.__projet = projet
-		self.__listeboites=self.__getlisteboites() 
 		self.__dicoText = dict()
 		self.__boiteGene = dict()
 		self.__boiteN = dict()
@@ -35,10 +34,14 @@ class Data():
 # création des dictionnaires vides que l'on va utiliser, dans la fonction init, on aura plus qu'à appeler la fonction pour la faire marcher après
 
 	def __run(self) :
+
+		if self.__getlisteboites()== "erreur dossiers" : return "erreur dossiers"
+		else : self.__listeboites=self.__getlisteboites() 
+	
 		if self.__getdicoText() == "erreur dossiers" : return "erreur dossiers"
 		else : 	self.__dicoText = self.__getdicoText() # dans la fonction run, remplir le dictionnaire si il n'y pas "erreur dossiers"
 
-		self.__GenerateTitre()
+		if self.__GenerateTitre() == "erreur dans les colonnes" : "erreur dans les colonnes"
 
 		if self.__getboiteGene() == "erreur dossiers" : return "erreur dossiers"
 		else : self.__boiteGene == self.__getboiteGene()
@@ -128,10 +131,10 @@ class Data():
 			
 		return dicoligne # renvoi un dictionaire pour boite donnée avec toute les lignes sous forme de liste du fichier texte, la clé est le n° de ligne
 
-	def __getlisteboites(self):
+	def __getlisteboites(self):		
 		tempboites=os.listdir(self.__projet) # récupération listes de dossiers et des fichiers
-		listeboites=[v for v in tempboites if os.path.isdir(os.path.join (self.__projet,v))] # tous les dossiers de mon répertoire
-		
+		if len(tempboites)<2 : return "erreur dossiers"
+		listeboites=[v for v in tempboites if os.path.isdir(os.path.join (self.__projet,v))] # tous les dossiers de mon répertoire		
 		return listeboites
 
 
@@ -139,16 +142,62 @@ class Data():
 		dicoligne = self.__getDicoLignes(self.__listeboites[0])
 		titre=dicoligne[0]
 		for i in range(len(titre)):
-			if titre[i]=="Boite": self.__COL_BOITE = i
-			if titre[i]=="Genes": self.__COL_GENES = i
-			if titre[i]=="Dossier": self.__COL_DOSSIER = i
-			if titre[i]=="Well": self.__COL_WELL = i
-			if titre[i]=="Col": self.__COL_COL = i
-			if titre[i]=="Ligne": self.__COL_LIGNE = i
-			if titre[i]=="Condition": self.__COL_CONDITION = i
-			if titre[i]=="N image": self.__COL_NIMAGE = i
-			if titre[i]=="CanalID": self.__COL_CANALID = i
-			if titre[i]=="CanalInt": self.__COL_CANALINT = i
+			if titre[i]=="Condition": 
+				self.__COL_BOITE = i
+				continue
+			if titre[i]=="Jobrun Name": 
+				self.__COL_JOBRUNNAME = i
+				continue
+			if titre[i]=="File Name": 
+				self.__COL_FILENAME = i
+				continue
+			if titre[i]=="Frame Time": 
+				self.__COL_FRAMETIME = i
+				continue
+			if titre[i]=="numero de boite": 
+				self.__COL_NUMEROBOITE = i
+				continue
+			if titre[i]=="Genes": 
+				self.__COL_GENES = i
+				continue
+			if titre[i]=="Well": 
+				self.__COL_WELL = i
+				continue
+			if titre[i]=="Well Index": 
+				self.__COL_WELLINDEX = i
+				continue
+			if titre[i]=="PointLoop Index": 
+				self.__COL_POINTLOOPINDEX = i
+				continue
+			if titre[i]=="WellLoop Index": 
+				self.__COL_WELLLOOPINDEX = i
+				continue
+			if titre[i]=="X": 
+				self.__COL_X = i
+				continue
+			if titre[i]=="Y": 
+				self.__COL_Y = i
+				continue
+			if titre[i]=="Z1": 
+				self.__COL_Z1 = i
+				continue
+			if titre[i]=="Frame Index": 
+				self.__COL_FRAMEINDEX = i
+				continue
+			if titre[i]=="plateRow": 
+				self.__COL_LIGNE = i
+				continue
+			if titre[i]=="plateColumn": 
+				self.__COL_COL = i
+				continue
+			if titre[i]=="UIDs": 
+				self.__COL_UIDS = i
+				continue
+
+		else : return "erreur dans les colonnes"
+
+		return "ok"
+
 				
 				
 				
