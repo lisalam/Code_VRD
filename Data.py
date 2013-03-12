@@ -24,10 +24,12 @@ class Data():
 	def __init__(self, projet): # le self rend l'action privée, propre au programmeur	
 		self.__projet = projet
 		self.__dicoText = dict()
-		self.__boiteGene = dict()
-		self.__boiteN = dict()
-		self.__boiteB = dict()
-		self.__boitecond = dict()
+		self.__dicoGene = dict()
+		self.__dicoNumBoite = dict()
+		self.__dicoNomBoite = dict()
+		self.__dicoCond = dict()
+		self.__flagdicoCond = 0
+		self.__flagdicoGene = 0
 		
 		print self.__run()		
 
@@ -37,62 +39,80 @@ class Data():
 
 		if self.__getlisteboites()== "erreur dossiers" : return "erreur dossiers"
 		else : self.__listeboites=self.__getlisteboites() 
-	
+			
 		if self.__getdicoText() == "erreur dossiers" : return "erreur dossiers"
 		else : 	self.__dicoText = self.__getdicoText() # dans la fonction run, remplir le dictionnaire si il n'y pas "erreur dossiers"
-
+		
 		if self.__GenerateTitre() == "erreur dans les colonnes" : "erreur dans les colonnes"
 
-		if self.__getboiteGene() == "erreur dossiers" : return "erreur dossiers"
-		else : self.__boiteGene == self.__getboiteGene()
+		if self.__getdicoGene() == "erreur dossiers" : return "erreur dossiers"
+		else : self.__dicoGene = self.__getdicoGene()
 
-		if self.__getboiteN() == "erreur dossiers" : return "erreur dossiers"
-		else : self.__boiteN == self.__getboiteN()
+		if self.__getdicoNumBoite() == "erreur dossiers" : return "erreur dossiers"
+		else : self.__dicoNumBoite = self.__getdicoNumBoite()
 
-		if self.__getboiteB() == "erreur dossiers" : return "erreur dossiers"
-		else : self.__boiteB == self.__getboiteB()
+		if self.__getdicoNomBoite() == "erreur dossiers" : return "erreur dossiers"
+		else : self.__dicoNomBoite = self.__getdicoNomBoite()
 
-		if self.__getboitecond() == "erreur dossiers" : return "erreur dossiers"
-		else : self.__boitecond == self.__getboitecond()
+		#print "self.__dicoNumBoite :"
+		#print self.__dicoNumBoite
+		#print "self.__dicoNomBoite :"
+		#print self.__dicoNomBoite
+		#print "self.__dicoCond :"
+		#print self.__getdicoCond()
 
 		return "ok"
 
 
-	def __getboitecond(self):
-		for i in range(len(self.__listeboites)):
+	def __getdicoCond(self): 
+		
+		self.__flagdicoGene = 1
+		
+		tempdico=dict()
+		for b in self.__listeboites :
+			
+			dicolignes = self.__getdicolignes(b) # recupere le dictionnaire pour la boite avec ttes les lignes du fichier texte
 			listecond=list()
-			self.__boitecond[self.__listeboites[i]]=listecond # la clé du dictionnaire est le nom de boite et la valeur sont les conditions présentes dans la boite
+			enscond=set()
+			for l in dicolignes.values() :
+				enscond.add(l[self.__COL_COND])
+			for i in range(len(enscond)) : listecond.append(enscond.pop())
 
-		return listecond # on retourne la liste des conditions présentes dans la boite que l'on aura appeler 
+			tempdico[b]=listecond
+			
+		return tempdico # renvoi un dict avec pour toutes les boites toutes les conditions presentes dans la boite.			
 
 	
-	def __getboiteN(self): # la clé est le nom de la boite et la clé est le numéro et le nom de la boite
+	def __getdicoNumBoite(self): # la clé est le nom de la boite et la clé est le numéro et le nom de la boite
 		tempdico=dict()
 		for i in range(len(self.__listeboites)): # pour chaque ligne de chaque dossier de mon répertoire
 			boite=self.__listeboites[i] 
 			f=self.__dicoText[boite]
 			fichier=open(f,"r") # ouvrir le fichier en lecture seule
 			alllines = fichier.readlines()[0] # lire chaque ligne du fichier, ici on veut lire que la première ligne
-			ligne = alllines.split("\r")[0] # on coupe la ligne avec "\r"
+			sep=self.getLineSep(alllines[0])
+			ligne = alllines.split(sep)[1] # on coupe la ligne avec "\r"
 			ligne = ligne.split("\t") # on splitte au niveau des tabulations la ligne déjà splittée avant
-			nb = ligne[self.__COL_BOITE]
+			nb = ligne[self.__COL_NUMEROBOITE]
 			tempdico[boite]=(nb, boite) # le dictionnaire temporaire tempdico a pour clé la boite et pour valeur son numéro et son nom de boite (son nom de fichier)
 		
 		
 		return tempdico
 
 		
-	def __getboiteB(self):
+	def __getdicoNomBoite(self):
 		tempdico=dict()
 		for i in range(len(self.__listeboites)):
 			boite=self.__listeboites[i]
 			f=self.__dicoText[boite]
 			fichier=open(f,"r")
 			alllines = fichier.readlines()[0]
-			ligne = alllines.split("\r")[1]
+			sep=self.getLineSep(alllines[0])
+			ligne = alllines.split(sep)[1]
 			ligne = ligne.split("\t")
-			nb = ligne[4]
-			tempdico[nb]=(nb, boite)
+			nomb = ligne[self.__COL_FOLDER]
+			numb = ligne[self.__COL_NUMEROBOITE]
+			tempdico[numb]=(numb, nomb)
 			
 		return tempdico
 
@@ -107,29 +127,39 @@ class Data():
 			if os.path.isfile(mot):
 				tempdico[self.__listeboites[i]]=mot
 		
-		return tempdico # 
+		return tempdico 
 
 		
 
-	def __getboiteGene(self) : # dictionnaire qui au nom de la boite sort tous les gènes contenus dans cette boite
-		for i in range(len(self.__listeboites)):
-			listegenes=list()
-			self.__boiteGene[self.__listeboites[i]]=listegenes
-
-		return listegenes
+	def __getdicoGene(self): 
+		self.__flagdicoGene = 1
+		
+		tempdico=dict()
+		for boite in self.__listeboites :
+			dicolignes = self.__getdicolignes(boite) # recupere le dictionnaire pour la boite avec ttes les lignes du fichier texte
+			listegene=list()
+			ensgene=set()
+			for i in range(0, len(dicolignes)-1) :
+				#print dicolignes[i]
+				ensgene.add(dicolignes[i][self.__COL_GENES])
+			for i in range(len(ensgene)) : listegene.append(ensgene.pop())
+			tempdico[boite]=listegene
+		return tempdico
 			
 
-	def __getDicoLignes(self, boite) :
+	def __getdicolignes(self, boite) :
 		f = self.__dicoText[boite]
 		fichier = open(f,"r") #ouvrir le fichier en lecture seule
 		alllines=fichier.readlines() # lire toutes les lignes du fichier
-		alllines=alllines[0].split("\r") # on veut lire la première ligne [0] et séparer les éléments de la ligne (ici le fichier excel fait que l'on a qu'une ligne dans tout le fichier)
-		dicoligne=dict() # création d'un dictionnaire pour les lignes
+		sep=self.getLineSep(alllines[0])
+		alllines=alllines[0].split(sep) # on veut lire la première ligne [0] et séparer les éléments de la ligne (ici le fichier excel fait que l'on a qu'une ligne dans tout le fichier)
+		dicolignes=dict() # création d'un dictionnaire pour les lignes
 		for i in range(0,len(alllines)): # boucle avec index
 			ligne=alllines[i].split("\t")
-			dicoligne[i]=ligne # ligne est une liste pour laquelle chaque valeur est une des colonnes du fichier texte initial
-			
-		return dicoligne # renvoi un dictionaire pour boite donnée avec toute les lignes sous forme de liste du fichier texte, la clé est le n° de ligne
+			dicolignes[i]=ligne # ligne est une liste pour laquelle chaque valeur est une des colonnes du fichier texte initial
+			if i< 10 : print boite, i, ligne
+			if i > 860 : print boite, i, ligne
+		return dicolignes # renvoi un dictionaire pour boite donnée avec toute les lignes sous forme de liste du fichier texte, la clé est le n° de ligne
 
 	def __getlisteboites(self):		
 		tempboites=os.listdir(self.__projet) # récupération listes de dossiers et des fichiers
@@ -139,11 +169,14 @@ class Data():
 
 
 	def __GenerateTitre(self): # création de constantes qui seront fixes, pour pas appeler à chaque fois le numéro de la colonne qui nous interesse
-		dicoligne = self.__getDicoLignes(self.__listeboites[0])
-		titre=dicoligne[0]
+		dicolignes = self.__getdicolignes(self.__listeboites[0])
+		titre=dicolignes[0]
 		for i in range(len(titre)):
+			if titre[i]=="Jobrun Folder": 
+				self.__COL_FOLDER = i 
+				continue
 			if titre[i]=="Condition": 
-				self.__COL_BOITE = i
+				self.__COL_COND = i
 				continue
 			if titre[i]=="Jobrun Name": 
 				self.__COL_JOBRUNNAME = i
@@ -198,13 +231,33 @@ class Data():
 
 		return "ok"
 
-				
-				
-				
+	def getLineSep(self, texte) :
+		t1=texte.split("\r")
+		t2=texte.split("\n")
+		if len(t1)>len(t2) : return "\r"
+		else : return "\n"
+
+	def __createDicoG(self) :
+		if self.__flagdicoGene == 0 : self.__getdicoGene()
+		return self.__dicoGene
+
+	def __createDicoC(self) :
+		if self.__flagdicoCond == 0 : self.__getdicoCond()
+		return self.__dicoCond
+
+
+# -------- propriétés de la classe Data --------
+
+	dicoG=property(__getdicoGene, doc="dictionnaire  ... =")
+	dicoC=property(__getdicoCond, doc="dictionnaire ...=")
+	listB=property(__getlisteboites, doc="liste ...=")
+	dicoNumB=property(__getdicoNumBoite, doc="dictionnaire ...=")
+	dicoNomB=property(__getdicoNomBoite, doc="dictionnaire ...=")			
 	
 
 	
-#**************** Fin de la classe Data ******
+# **************** Fin de la classe Data *****************
+
 
 
 # ----------------------------------------------------------------------------
@@ -212,5 +265,7 @@ class Data():
 
 if __name__ == "__main__" :
 	data=Data("/Users/lisalamasse/Dropbox/Macros_Lisa/ProjetVRD_Tools")
+	#print data.dicoG
+	#print data.__createDicoG()
 
 	
