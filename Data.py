@@ -70,7 +70,6 @@ class Data():
 		
 		tempdico=dict()
 		for b in self.__listeboites :
-			
 			dicolignes = self.__getdicolignes(b) # recupere le dictionnaire pour la boite avec ttes les lignes du fichier texte
 			listecond=list()
 			enscond=set()
@@ -157,8 +156,8 @@ class Data():
 		for i in range(0,len(alllines)): # boucle avec index
 			ligne=alllines[i].split("\t")
 			dicolignes[i]=ligne # ligne est une liste pour laquelle chaque valeur est une des colonnes du fichier texte initial
-			if i< 10 : print boite, i, ligne
-			if i > 860 : print boite, i, ligne
+			#if i< 10 : print boite, i, ligne
+			#if i > 860 : print boite, i, ligne
 		return dicolignes # renvoi un dictionaire pour boite donnée avec toute les lignes sous forme de liste du fichier texte, la clé est le n° de ligne
 
 	def __getlisteboites(self):		
@@ -248,11 +247,11 @@ class Data():
 
 # -------- propriétés de la classe Data --------
 
-	dicoG=property(__getdicoGene, doc="dictionnaire  ... =")
-	dicoC=property(__getdicoCond, doc="dictionnaire ...=")
-	listB=property(__getlisteboites, doc="liste ...=")
-	dicoNumB=property(__getdicoNumBoite, doc="dictionnaire ...=")
-	dicoNomB=property(__getdicoNomBoite, doc="dictionnaire ...=")			
+	dicoG=property(__getdicoGene, doc="dictionnaire  ... =")  #renvoi un dictionnaire avec comme clé toutes les boites et en valeur tous les genes
+	dicoC=property(__getdicoCond, doc="dictionnaire ...=")    #renvoi un dictionnaire avec comme clé toutes les boites et en valeur tous les conditions
+	listB=property(__getlisteboites, doc="liste ...=")        #renvoi une liste avec toutes les boites du projet (= dossier)
+	dicoNumB=property(__getdicoNumBoite, doc="dictionnaire ...=") #renvoi un dictionnaire avec comme clé toutes les boites et en valeur les n° et les noms des boites
+	dicoNomB=property(__getdicoNomBoite, doc="dictionnaire ...=")	#renvoi un dictionnaire avec comme clé tous les n° des boites et en valeur les n° et les noms des boites		
 	
 
 	
