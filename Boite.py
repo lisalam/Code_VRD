@@ -17,83 +17,64 @@ codecs.setDefaultEncoding('utf-8')
 # ****************************** Début de la classe "Boite" ******************************
 
 class Boite():
-	""" Classe concernant uniquement les boites, et leur dictionnaires associés """
+	""" Classe concernant uniquement les boites, et leur dictionnaires et listes associés """
 
-	def __init__(self, boite): 	
-		self.__boite = boite
-		self.__dicoBoiteCond = dict()
-		self.__dicoBoiteUID = dict()
-		self.__dicoBoiteCondInv = dict()
+	def __init__(self, nomboite): 	
+		self.__nomboite = nomboite
+		self.__listGene = list()
+		self.__listCond = list()
+		self.__dicoWell = dict()
 		
+
 		print self.__run()
 
 
 	def __run(self):
 
-		if self.__getlisteboites()== "erreur dossiers" : return "erreur dossiers"
-		else : self.__listeboites=self.__getlisteboites() 
+		if self.__getlistGene()== "erreur gene" : return "erreur gene"
+		else : self.__listGene=self.__getlistGene() 
 		
-		if self.__getlisteCondBoite() == "erreur boite" : return "erreur boite"
-		else : self.__listeCondBoite=self.__getlisteCondBoite()
+		if self.__getlistCond() == "erreur condition" : return "erreur condition"
+		else : self.__listCond=self.__getlistCond()
 
-		if self.__getdicoBoiteCond() == "erreur boite" : return "erreur boite"
-		else : self.__dicoBoiteCond=self.__getdicoBoiteCond() 
+		if self.__getdicoWell() == "erreur puit" : return "erreur puit"
+		else : self.__dicoWell=self.__getdicoWell() 
 	
-		if self.__getdicoBoiteUID() == "erreur boite" : return "erreur boite"
-		else : 	self.__dicoBoiteUID = self.__getdicoBoiteUID() 
-
-		if self.__getdicoBoiteCondInv() == "erreur boite" : return "erreur boite"
-		else : self.__dicoBoiteCondInv == self.__getdicoBoiteCondInv()
-
 		
 		return "ok"
 
 
 	
-	def __getBoiteCond(self, boite):
-		tempdico=dict()
-		for b in self.__listeCondBoite :
-			dicolignes = self.__getdicolignes(b) # recupere le dictionnaire pour la boite avec ttes les lignes du fichier texte
-			listecond=list()
-			enscond=set()
-			for l in dicolignes.values() :
-				enscond.add(l[self.__COL_COND])
-				for i in range(len(enscond)) : listecond.append(enscond.pop())
-
-		return tempdico
-
+	def __getlistGene(self):
+		pass
 	
-	def __getlisteCondBoite(self):
+	def __getlistCond(self):
 		pass
 		
 			
-
-	def __getdicoBoiteUID(self):
+	def __getdicoWell(self):
 		pass
 
 		
-
-	def __getdicoBoiteCondInv(self):
-		pass
+	
 
 # ------------------------------ Propriétés de la classe "Boite" ------------------------------
 
-
-
-
-
-
-
-
-
-
+	genes=property(__getlistGene, doc = "Liste des gènes ...=")
+	conds=property(__getlistCond, doc = "Liste des conditions ...=")
+	dicoW=property(__getdicoWell, doc = "dictionnaire ...=")
+	
 
 # ****************************** Fin de la classe "Boite" ******************************		
 
 # TEST DE LA CLASSE
 
 if __name__ == "__main__" :
-	boite=Boite 
+	boite=Boite("20130227_102727_525")
+	print boite.genes
+	print boite.conds
+	print boite.dicoW
+	
 
 
 	
