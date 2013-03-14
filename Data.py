@@ -73,8 +73,8 @@ class Data():
 			dicolignes = self.__getdicolignes(b) # recupere le dictionnaire pour la boite avec ttes les lignes du fichier texte
 			listecond=list()
 			enscond=set()
-			for l in dicolignes.values() :
-				enscond.add(l[self.__COL_COND])
+			for i in range(1, len(dicolignes)-1) :
+				enscond.add(dicolignes[i][self.__COL_COND])
 			for i in range(len(enscond)) : listecond.append(enscond.pop())
 
 			tempdico[b]=listecond
@@ -85,14 +85,16 @@ class Data():
 	def __getdicoNumBoite(self): # la clé est le nom de la boite et la clé est le numéro et le nom de la boite
 		tempdico=dict()
 		for i in range(len(self.__listeboites)): # pour chaque ligne de chaque dossier de mon répertoire
-			boite=self.__listeboites[i] 
+			boite=self.__listeboites[i]
 			f=self.__dicoText[boite]
 			fichier=open(f,"r") # ouvrir le fichier en lecture seule
-			alllines = fichier.readlines()[0] # lire chaque ligne du fichier, ici on veut lire que la première ligne
-			sep=self.getLineSep(alllines[0])
-			ligne = alllines.split(sep)[1] # on coupe la ligne avec "\r"
-			ligne = ligne.split("\t") # on splitte au niveau des tabulations la ligne déjà splittée avant
-			nb = ligne[self.__COL_NUMEROBOITE]
+			alllines = fichier.read() # lire chaque ligne du fichier, ici on veut lire que la première ligne
+			sep=self.getLineSep(alllines)
+			#sep="\r"
+			ligne = alllines.split(sep) # on coupe la ligne avec "\r" ou avec "\n"
+			ligne1 = ligne[1]
+			listvals = ligne1.split("\t") # on splitte au niveau des tabulations la ligne déjà splittée avant
+			nb = listvals[self.__COL_NUMEROBOITE]
 			tempdico[boite]=(nb, boite) # le dictionnaire temporaire tempdico a pour clé la boite et pour valeur son numéro et son nom de boite (son nom de fichier)
 		
 		
@@ -105,12 +107,13 @@ class Data():
 			boite=self.__listeboites[i]
 			f=self.__dicoText[boite]
 			fichier=open(f,"r")
-			alllines = fichier.readlines()[0]
-			sep=self.getLineSep(alllines[0])
-			ligne = alllines.split(sep)[1]
-			ligne = ligne.split("\t")
-			nomb = ligne[self.__COL_FOLDER]
-			numb = ligne[self.__COL_NUMEROBOITE]
+			alllines = fichier.read()
+			sep=self.getLineSep(alllines)
+			ligne = alllines.split(sep)
+			ligne1 = ligne[1]
+			listvals = ligne1.split("\t")
+			nomb = listvals[self.__COL_FOLDER]
+			numb = listvals[self.__COL_NUMEROBOITE]
 			tempdico[numb]=(numb, nomb)
 			
 		return tempdico
@@ -138,7 +141,7 @@ class Data():
 			dicolignes = self.__getdicolignes(boite) # recupere le dictionnaire pour la boite avec ttes les lignes du fichier texte
 			listegene=list()
 			ensgene=set()
-			for i in range(0, len(dicolignes)-1) :
+			for i in range(1, len(dicolignes)-1) :
 				#print dicolignes[i]
 				ensgene.add(dicolignes[i][self.__COL_GENES])
 			for i in range(len(ensgene)) : listegene.append(ensgene.pop())
@@ -264,7 +267,16 @@ class Data():
 
 if __name__ == "__main__" :
 	data=Data("/Users/lisalamasse/Dropbox/Macros_Lisa/ProjetVRD_Tools")
-	#print data.dicoG
-	#print data.__createDicoG()
+	print "dicoG", data.dicoG
+	print "----- fin dicoG -----"
+	print data.dicoC
+	print "----- fin dicoC -----"
+	print data.listB
+	print "----- fin listB -----"
+	print data.dicoNumB
+	print "----- fin dicoNumB -----"
+	print data.dicoNomB
+	print "----- fin dicoNomB -----"
+	
 
 	
