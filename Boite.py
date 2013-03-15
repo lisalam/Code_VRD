@@ -24,6 +24,7 @@ class Boite():
 		self.__listGene = list()
 		self.__listCond = list()
 		self.__dicoWell = dict()
+		self.__projet = ""
 		
 
 		print self.__run()
@@ -47,6 +48,7 @@ class Boite():
 	
 	def __getlistGene(self):
 		pass
+		
 	
 	def __getlistCond(self):
 		pass
@@ -55,14 +57,20 @@ class Boite():
 	def __getdicoWell(self):
 		pass
 
-		
-	
+	def __getNom(self) : return self.__nomboite
+
+	def __getProjet(self) : return self.__projet
+
+	def __setProjet(self, projet) : self.__projet = projet
+
 
 # ------------------------------ Propriétés de la classe "Boite" ------------------------------
 
 	genes=property(__getlistGene, doc = "Liste des gènes ...=")
 	conds=property(__getlistCond, doc = "Liste des conditions ...=")
 	dicoW=property(__getdicoWell, doc = "dictionnaire ...=")
+	nom =property(__getNom, doc = " ...=")
+	projet=property(__getProjet, __setProjet , doc = " ...=")
 	
 
 # ****************************** Fin de la classe "Boite" ******************************		
@@ -71,9 +79,12 @@ class Boite():
 
 if __name__ == "__main__" :
 	boite=Boite("20130227_102727_525")
+	boite.projet="/Users/lisalamasse/Dropbox/Macros_Lisa/ProjetVRD_Tools"
 	print boite.genes
 	print boite.conds
 	print boite.dicoW
+	print boite.nom
+	print boite.projet
 	
 
 
