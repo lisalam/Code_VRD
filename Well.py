@@ -66,7 +66,7 @@ print "--- debut ---"
 # ------------------------ Fin de la classe "Well" ------------------------
 
 if __name__ == "__main__" :
-	w=Well(lc=(20,43))
+	w=Well(lc=(1,12))
 	print w.code
 	print w.LC
 

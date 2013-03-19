@@ -14,18 +14,20 @@ sys.path.append(mypath)
 from org.python.core import codecs
 codecs.setDefaultEncoding('utf-8')
 
+from Data import Data
+
 # ****************************** Début de la classe "Boite" ******************************
 
-class Boite():
+class Boite(object):
 	""" Classe concernant uniquement les boites, et leur dictionnaires et listes associés """
 
-	def __init__(self, nomboite): 	
+	def __init__(self, nomboite, projet): 	
 		self.__nomboite = nomboite
 		self.__listGene = list()
 		self.__listCond = list()
 		self.__dicoWell = dict()
-		self.__projet = ""
-		
+		self.__projet = projet
+		self.__data = Data(self.__projet)
 
 		print self.__run()
 
@@ -55,7 +57,12 @@ class Boite():
 		
 			
 	def __getdicoWell(self):
-		pass
+		dicolignes = self.__data.getdicolignes(self.__nomboite)
+		#print dicolignes.keys()
+		#print dicolignes[0], dicolignes[1]
+		
+		
+		
 
 	def __getNom(self) : return self.__nomboite
 
@@ -78,13 +85,12 @@ class Boite():
 # TEST DE LA CLASSE
 
 if __name__ == "__main__" :
-	boite=Boite("20130227_102727_525")
-	boite.projet="/Users/lisalamasse/Dropbox/Macros_Lisa/ProjetVRD_Tools"
-	print boite.genes
-	print boite.conds
-	print boite.dicoW
-	print boite.nom
-	print boite.projet
+	boite=Boite("20130227_102727_525", "/Users/lisalamasse/Dropbox/Macros_Lisa/ProjetVRD_Tools")
+	#print boite.genes
+	#print boite.conds
+	#print boite.dicoW
+	#print boite.nom
+	#print boite.projet
 	
 
 

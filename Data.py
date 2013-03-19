@@ -16,7 +16,7 @@ codecs.setDefaultEncoding('utf-8')
 
 
 #**************** Debut de la classe Data ******
-class Data():
+class Data(object):
 	""" Classe principale des donnees construit tous les dictionnaires au niveau du projet """
 	
 	#"init" permet d'initialiser
@@ -70,7 +70,7 @@ class Data():
 		
 		tempdico=dict()
 		for b in self.__listeboites :
-			dicolignes = self.__getdicolignes(b) # recupere le dictionnaire pour la boite avec ttes les lignes du fichier texte
+			dicolignes = self.getdicolignes(b) # recupere le dictionnaire pour la boite avec ttes les lignes du fichier texte
 			listecond=list()
 			enscond=set()
 			for i in range(1, len(dicolignes)-1) :
@@ -138,7 +138,7 @@ class Data():
 		
 		tempdico=dict()
 		for boite in self.__listeboites :
-			dicolignes = self.__getdicolignes(boite) # recupere le dictionnaire pour la boite avec ttes les lignes du fichier texte
+			dicolignes = self.getdicolignes(boite) # recupere le dictionnaire pour la boite avec ttes les lignes du fichier texte
 			listegene=list()
 			ensgene=set()
 			for i in range(1, len(dicolignes)-1) :
@@ -149,7 +149,7 @@ class Data():
 		return tempdico
 			
 
-	def __getdicolignes(self, boite) :
+	def getdicolignes(self, boite) :
 		f = self.__dicoText[boite]
 		fichier = open(f,"r") #ouvrir le fichier en lecture seule
 		alllines=fichier.readlines() # lire toutes les lignes du fichier
@@ -171,7 +171,7 @@ class Data():
 
 
 	def __GenerateTitre(self): # création de constantes qui seront fixes, pour pas appeler à chaque fois le numéro de la colonne qui nous interesse
-		dicolignes = self.__getdicolignes(self.__listeboites[0])
+		dicolignes = self.getdicolignes(self.__listeboites[0])
 		titre=dicolignes[0]
 		for i in range(len(titre)):
 			if titre[i]=="Jobrun Folder": 
@@ -256,8 +256,6 @@ class Data():
 	dicoNumB=property(__getdicoNumBoite, doc="dictionnaire ...=") #renvoi un dictionnaire avec comme clé toutes les boites et en valeur les n° et les noms des boites
 	dicoNomB=property(__getdicoNomBoite, doc="dictionnaire ...=")	#renvoi un dictionnaire avec comme clé tous les n° des boites et en valeur les n° et les noms des boites		
 	
-
-	
 # **************** Fin de la classe Data *****************
 
 
@@ -277,6 +275,7 @@ if __name__ == "__main__" :
 	print "----- fin dicoNumB -----"
 	print data.dicoNomB
 	print "----- fin dicoNomB -----"
+	print data.dicoLignes
 	
 
 	
