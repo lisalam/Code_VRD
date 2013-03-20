@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: iso-8859-15 -*-
+import os, sys
 import javax.swing as swing
 import java.awt as awt
 from javax.swing import BorderFactory
@@ -13,7 +16,7 @@ class Test(swing.JFrame):
 			self.run()
 
 		def run(self):
-			self.size = (1000, 400)
+			self.size = (600, 200)
 			self.contentPane.layout = awt.BorderLayout()
 			
 			self.__Dossier = swing.JTextField(preferredSize=(400, 30), horizontalAlignment=swing.SwingConstants.LEFT)
@@ -33,66 +36,69 @@ class Test(swing.JFrame):
 			self.__display10 = swing.JTextField(preferredSize=(300, 30), horizontalAlignment=swing.SwingConstants.LEFT)
 			self.__display10.text = ""
 			Panel1.add(self.__display10)
-			#Panel1.add(self.__Dossier)
-			#self.contentPane.add(Panel1)
 			bouton = swing.JButton("Browse", actionPerformed=self.__bouton)
-			#self.contentPane.add(Panel1)
 			Panel1.add(bouton)
-			#label=swing.JLabel("Label2")
-			#label.setText("Dossier")
-			#Panel1.add(label)
-
-
+			
 			Panel2=swing.JPanel(awt.FlowLayout(awt.FlowLayout.LEFT))
 			Panel2.setBorder(line)
-			label=swing.JLabel("Label10")
-			label.setText("Image")
-			Panel2.add(label)
-			self.__display10 = swing.JTextField(preferredSize=(70, 30), horizontalAlignment=swing.SwingConstants.LEFT)
-			self.__display10.text = ""
-			Panel2.add(self.__display10)
-
-			
-			#Panel2.add(self.__Boite)
-			#self.contentPane.add(Panel2)
-			#bouton = swing.JButton("Select", actionPerformed=self.__bouton)
-			#self.contentPane.add(Panel2)
-			#Panel2.add(bouton)
-
-			#self.__label=swing.JLabel("Images")
-			#Panel2.add(self.__label)
-
-			Panel3=swing.JPanel(awt.FlowLayout(awt.FlowLayout.LEFT))
-			Panel3.setBorder(line)
-			label=swing.JLabel("Label10")
-			label.setText("Numero de Boite")
-			Panel3.add(label)
-			self.__display10 = swing.JTextField(preferredSize=(50, 30), horizontalAlignment=swing.SwingConstants.LEFT)
-			self.__display10.text = ""
-			Panel3.add(self.__display10)
-			
-
-			
-			#Panel3.add(self.__Well)
-			#self.contentPane.add(Panel3)
-			#bouton = swing.JButton("Select", actionPerformed=self.__bouton)
-			#self.contentPane.add(Panel3)
-			#Panel3.add(bouton)
-
-			Panel4=swing.JPanel(awt.FlowLayout(awt.FlowLayout.LEFT))
-			Panel4.setBorder(line)
-			Panel4.add(self.__Image)
-			self.contentPane.add(Panel4)
-			bouton = swing.JButton("Select", actionPerformed=self.__bouton)
-			self.contentPane.add(Panel4)
-			Panel4.add(bouton)
-			
 			generate = swing.JButton("Generate", size=(100, 70), actionPerformed=self.__generate)
 			Panel2.add(generate)
-
 			close = swing.JButton("Close", size=(100, 70), actionPerformed=self.__close)
 			Panel2.add(close)
 
+			Panel3=swing.JPanel(awt.FlowLayout(awt.FlowLayout.LEFT))
+			Panel3.setBorder(line)
+		
+			grid0 = awt.GridLayout()
+			grid0.setRows(4)
+			Panel3=swing.JPanel(grid0)
+			Panel3.setBorder(line)
+			label=swing.JLabel("")
+			label.setText("Nom de la boite")
+			Panel3.add(label)
+			self.__display2 = swing.JTextField(preferredSize=(100, 30), horizontalAlignment=swing.SwingConstants.LEFT)
+			self.__display2.text = ""
+			Panel3.add(self.__display2)
+			
+			label=swing.JLabel()
+			label.setText("Numero de la boite")
+			Panel3.add(label)
+			self.__display3 = swing.JTextField(preferredSize=(100, 30), horizontalAlignment=swing.SwingConstants.LEFT)
+			self.__display3.text = ""
+			Panel3.add(self.__display3)
+
+			label=swing.JLabel()
+			label.setText("Images")
+			Panel3.add(label)
+			self.__display4 = swing.JTextField(preferredSize=(100, 30), horizontalAlignment=swing.SwingConstants.LEFT)
+			self.__display4.text = ""
+			Panel3.add(self.__display4)
+
+			Panel4=swing.JPanel(awt.FlowLayout(awt.FlowLayout.LEFT))
+			Panel4.setBorder(line)
+			grid1 = awt.GridLayout()
+			grid1.setRows(3)
+			grid1.setColumns(2)
+			Panel4=swing.JPanel(grid1)
+			label=swing.JLabel("")
+			label.setText("Well")
+			Panel4.add(label)
+			self.__display2 = swing.JTextField(preferredSize=(100, 30), horizontalAlignment=swing.SwingConstants.LEFT)
+			self.__display2.text = ""
+			Panel4.add(self.__display2)
+			label=swing.JLabel()
+			label.setText("Ligne")
+			Panel4.add(label)
+			self.__display3 = swing.JTextField(preferredSize=(100, 30), horizontalAlignment=swing.SwingConstants.LEFT)
+			self.__display3.text = ""
+			Panel4.add(self.__display3)
+			label=swing.JLabel()
+			label.setText("Colonne")
+			Panel4.add(label)
+			self.__display3 = swing.JTextField(preferredSize=(100, 30), horizontalAlignment=swing.SwingConstants.LEFT)
+			self.__display3.text = ""
+			Panel4.add(self.__display3)
+			
 			
 			self.contentPane.add(Panel1, awt.BorderLayout.NORTH)
 			self.contentPane.add(Panel2, awt.BorderLayout.SOUTH)
