@@ -6,9 +6,11 @@ import java.awt as awt
 from javax.swing import BorderFactory
 from javax.swing.border import EtchedBorder, TitledBorder
 from java.awt import Font
+#from java.swing.colorchooser import DefaultColorSelectionModel
 
 
-class Test(swing.JFrame):
+
+class Fenetre(swing.JFrame):
 
 		def __init__(self):
 			swing.JFrame.__init__(self, title="VRD_Tools")
@@ -16,13 +18,15 @@ class Test(swing.JFrame):
 			self.run()
 
 		def run(self):
-			self.size = (600, 200)
+			self.size = (600, 250)
 			self.contentPane.layout = awt.BorderLayout()
+			
 			
 			self.__Dossier = swing.JTextField(preferredSize=(400, 30), horizontalAlignment=swing.SwingConstants.LEFT)
 			self.__Boite = swing.JTextField(preferredSize=(400, 30), horizontalAlignment=swing.SwingConstants.LEFT)
 			self.__Well = swing.JTextField(preferredSize=(400, 30), horizontalAlignment=swing.SwingConstants.LEFT)
 			self.__Image = swing.JTextField(preferredSize=(400, 30), horizontalAlignment=swing.SwingConstants.LEFT)
+			
 			
 			
 			line = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)
@@ -39,7 +43,7 @@ class Test(swing.JFrame):
 			bouton = swing.JButton("Browse", actionPerformed=self.__bouton)
 			Panel1.add(bouton)
 			
-			Panel2=swing.JPanel(awt.FlowLayout(awt.FlowLayout.LEFT))
+			Panel2=swing.JPanel(awt.FlowLayout(awt.FlowLayout.RIGHT))
 			Panel2.setBorder(line)
 			generate = swing.JButton("Generate", size=(100, 70), actionPerformed=self.__generate)
 			Panel2.add(generate)
@@ -98,7 +102,40 @@ class Test(swing.JFrame):
 			self.__display3 = swing.JTextField(preferredSize=(100, 30), horizontalAlignment=swing.SwingConstants.LEFT)
 			self.__display3.text = ""
 			Panel4.add(self.__display3)
+
+
 			
+# ---------TESTS----------
+
+
+			#menu = swing.JScrollBar(1, 8, 10, 1, 250)
+			#self.contentPane.add(menu)
+
+			#menu = swing.JSpinner()
+			#self.contentPane.add(menu)
+
+			#menu = swing.JSplitPane()
+			#self.contentPane.add(menu)
+
+			#menu = swing.JToolBar("Image",1)
+			#self.contentPane.add(menu)
+
+			#menu = swing.JTree()
+			#self.contentPane.add(menu)
+
+			#menu = swing.RepaintManager()
+			#self.contentPane.add(menu)
+
+			#menu = swing.JPasswordField("")
+			#self.contentPane.add(menu)
+
+			#menu = swing.JTextArea("hello", 1, 8)
+			#self.contentPane.add(menu)
+
+			
+
+#---------FIN TESTS----------
+
 			
 			self.contentPane.add(Panel1, awt.BorderLayout.NORTH)
 			self.contentPane.add(Panel2, awt.BorderLayout.SOUTH)
@@ -121,5 +158,5 @@ class Test(swing.JFrame):
 
 			
 if __name__ == "__main__":
-	test = Test()
-	test.show()
+	fenetre = Fenetre()
+	fenetre.show()
