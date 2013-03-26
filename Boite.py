@@ -30,7 +30,7 @@ class Boite(object):
 		self.__dicoWell = dict()
 		self.__projet = projet
 		self.__data = Data(self.__projet)
-		self.__PUITS_96()
+		
 
 		print self.__run()
 
@@ -61,15 +61,28 @@ class Boite(object):
 		
 			
 	def __getdicoWell(self):
+		tempdict = dict()
 		dicolignes = self.__data.getdicolignes(self.__nomboite)
-		ensDedans = set()
-		ensDehors = set()
-		if val in self.__PUITS_96 :
-			ensDedans.add(val)
-		else : ensDehors.add(val)
-		ensDedans.difference(ensDehors)
+		ensTotal = set()
+		ensLignes = set()
+		for val in self.PUITS_96() : ensTotal.add(val.code)
+
+		for val in dicolignes.values() :
+			tempcode = val[self.__data.COL_WELL]
+			w = Well(code=tempcode)
+			cond = val[self.__data.COL_COND]
+			gene = val[self.__data.COL_GENES]
+			
+			ensLignes.add(w.code)
+			tempdict[w.code]=(w, cond, gene)
+
+		ensInter =ensTotal.difference(ensLignes)
+
+		for w in ensInter : tempdict[w.code]=(w, "NA", "NA")
+
+		return tempdict
 		
-		
+			
 		#print dicolignes.keys()
 		#print dicolignes[0], dicolignes[1]
 		
@@ -83,16 +96,16 @@ class Boite(object):
 	def __setProjet(self, projet) : self.__projet = projet
 
 	@staticmethod
-	def PUITS_96(self) :
+	def PUITS_96() :
 		templist = list()
-		i = "1, 2, 3, 4, 5, 6, 7, 8"
-		j = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12"
-		p = Well(i,j)
-		for i in self.__PUITS_96:
-			print i
-		for j in self.__PUITS_96:
-			print j
-		templist.append(p)
+		for i in range(1,9) :
+			for j in range(1,13) :
+				p = Well(lc=(i,j))
+				templist.append(p)
+
+		#templist = [Well(i,j) for i in range(1,9) for j in range(1,13)] # 2 boucles imbriquées l'une avec l'autre et un "append", alors on peut faire une liste en intension et c'est le cas sur cette ligne
+
+
 		templist.sort()
 
 		return templist
@@ -119,8 +132,9 @@ if __name__ == "__main__" :
 	#print boite.dicoW
 	#print boite.nom
 	#print boite.projet
-	
-	
+	#print Boite.PUITS_96()
 
 
-	
+	print boite.dicoW["B12"][0].code , boite.dicoW["B12"][0].LC, boite.dicoW["B12"][1], boite.dicoW["B12"][2]
+
+
