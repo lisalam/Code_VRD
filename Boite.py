@@ -127,12 +127,12 @@ class Boite(object):
 
 if __name__ == "__main__" :
 	boite=Boite("20130227_102727_525", "/Users/lisalamasse/Dropbox/Macros_Lisa/ProjetVRD_Tools")
-	#print boite.genes
-	#print boite.conds
-	#print boite.dicoW
-	#print boite.nom
-	#print boite.projet
-	#print Boite.PUITS_96()
+	print boite.genes
+	print boite.conds
+	print boite.dicoW
+	print boite.nom
+	print boite.projet
+	print Boite.PUITS_96()
 
 
 	print boite.dicoW["B12"][0].code , boite.dicoW["B12"][0].LC, boite.dicoW["B12"][1], boite.dicoW["B12"][2]
