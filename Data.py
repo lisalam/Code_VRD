@@ -74,7 +74,7 @@ class Data(object):
 			listecond=list()
 			enscond=set()
 			for i in range(1, len(dicolignes)-1) :
-				enscond.add(dicolignes[i][self.__COL_COND])
+				enscond.add(dicolignes[i][self.COL_COND])
 			for i in range(len(enscond)) : listecond.append(enscond.pop())
 
 			tempdico[b]=listecond
@@ -94,7 +94,7 @@ class Data(object):
 			ligne = alllines.split(sep) # on coupe la ligne avec "\r" ou avec "\n"
 			ligne1 = ligne[1]
 			listvals = ligne1.split("\t") # on splitte au niveau des tabulations la ligne déjà splittée avant
-			nb = listvals[self.__COL_NUMEROBOITE]
+			nb = listvals[self.COL_NUMEROBOITE]
 			tempdico[boite]=(nb, boite) # le dictionnaire temporaire tempdico a pour clé la boite et pour valeur son numéro et son nom de boite (son nom de fichier)
 		
 		
@@ -112,8 +112,8 @@ class Data(object):
 			ligne = alllines.split(sep)
 			ligne1 = ligne[1]
 			listvals = ligne1.split("\t")
-			nomb = listvals[self.__COL_FOLDER]
-			numb = listvals[self.__COL_NUMEROBOITE]
+			nomb = listvals[self.COL_FOLDER]
+			numb = listvals[self.COL_NUMEROBOITE]
 			tempdico[numb]=(numb, nomb)
 			
 		return tempdico
@@ -143,7 +143,7 @@ class Data(object):
 			ensgene=set()
 			for i in range(1, len(dicolignes)-1) :
 				#print dicolignes[i]
-				ensgene.add(dicolignes[i][self.__COL_GENES])
+				ensgene.add(dicolignes[i][self.COL_GENES])
 			for i in range(len(ensgene)) : listegene.append(ensgene.pop())
 			tempdico[boite]=listegene
 		return tempdico
@@ -175,58 +175,58 @@ class Data(object):
 		titre=dicolignes[0]
 		for i in range(len(titre)):
 			if titre[i]=="Jobrun Folder": 
-				self.__COL_FOLDER = i 
+				self.COL_FOLDER = i 
 				continue
 			if titre[i]=="Condition": 
-				self.__COL_COND = i
+				self.COL_COND = i
 				continue
 			if titre[i]=="Jobrun Name": 
-				self.__COL_JOBRUNNAME = i
+				self.COL_JOBRUNNAME = i
 				continue
 			if titre[i]=="File Name": 
-				self.__COL_FILENAME = i
+				self.COL_FILENAME = i
 				continue
 			if titre[i]=="Frame Time": 
-				self.__COL_FRAMETIME = i
+				self.COL_FRAMETIME = i
 				continue
 			if titre[i]=="numero de boite": 
-				self.__COL_NUMEROBOITE = i
+				self.COL_NUMEROBOITE = i
 				continue
 			if titre[i]=="Genes": 
-				self.__COL_GENES = i
+				self.COL_GENES = i
 				continue
 			if titre[i]=="Well": 
-				self.__COL_WELL = i
+				self.COL_WELL = i
 				continue
 			if titre[i]=="Well Index": 
-				self.__COL_WELLINDEX = i
+				self.COL_WELLINDEX = i
 				continue
 			if titre[i]=="PointLoop Index": 
-				self.__COL_POINTLOOPINDEX = i
+				self.COL_POINTLOOPINDEX = i
 				continue
 			if titre[i]=="WellLoop Index": 
-				self.__COL_WELLLOOPINDEX = i
+				self.COL_WELLLOOPINDEX = i
 				continue
 			if titre[i]=="X": 
-				self.__COL_X = i
+				self.COL_X = i
 				continue
 			if titre[i]=="Y": 
-				self.__COL_Y = i
+				self.COL_Y = i
 				continue
 			if titre[i]=="Z1": 
-				self.__COL_Z1 = i
+				self.COL_Z1 = i
 				continue
 			if titre[i]=="Frame Index": 
-				self.__COL_FRAMEINDEX = i
+				self.COL_FRAMEINDEX = i
 				continue
 			if titre[i]=="plateRow": 
-				self.__COL_LIGNE = i
+				self.COL_LIGNE = i
 				continue
 			if titre[i]=="plateColumn": 
-				self.__COL_COL = i
+				self.COL_COL = i
 				continue
 			if titre[i]=="UIDs": 
-				self.__COL_UIDS = i
+				self.COL_UIDS = i
 				continue
 
 		else : return "erreur dans les colonnes"
