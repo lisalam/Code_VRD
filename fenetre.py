@@ -24,7 +24,7 @@ username=getpass.getuser()
 mypath=os.path.expanduser(os.path.join("~","Dropbox","Macros_Lisa","Code_VRD"))
 sys.path.append(mypath)
 
-from Image import Image
+from ListeImage import ListeImage
 
 from org.python.core import codecs
 codecs.setDefaultEncoding('utf-8')
@@ -55,16 +55,16 @@ class Fenetre_modif(swing.JFrame):
 
 			grid = awt.GridLayout()
 			grid.setRows(4)
-			grid.setHgap(20)
-			grid.setVgap(10)
+			grid.setHgap(1)
+			grid.setVgap(1)
 			Panel2=swing.JPanel(grid)
 			Panel2.setBorder(line)
 			
 			
-			label=swing.JLabel()
-			label.setText("Nom de la boite")
+			label=swing.JLabel("Nom de la boite : ", horizontalAlignment=swing.SwingConstants.RIGHT)
+			#label.setText("Nom de la boite : ")
 			Panel2.add(label)
-			self.__dispNomBoite = swing.JTextField(preferredSize=(200, 30), horizontalAlignment=swing.SwingConstants.LEFT)
+			self.__dispNomBoite = swing.JTextField(preferredSize=(200, 30), horizontalAlignment=swing.SwingConstants.CENTER)
 			self.__dispNomBoite.text = "20130227_102727_525"
 			Panel2.add(self.__dispNomBoite)
 			label=swing.JLabel()
@@ -127,7 +127,7 @@ class Fenetre_modif(swing.JFrame):
 
 			
 			
-		def __browse(self):
+		def __browse(self, event):
 			print "ok browse"
 
 
@@ -135,7 +135,7 @@ class Fenetre_modif(swing.JFrame):
 			print "ok"
 			print self.__choixLigne.getSelectedItem() 
 			print self.__choixCol.getSelectedItem()
-			f = Image()
+			f = ListeImage()
 			f.show()
 			
 
@@ -144,8 +144,8 @@ class Fenetre_modif(swing.JFrame):
 			time.sleep(0.01) 
 			self.dispose()
 
-		def getNom(self) : return self.__dispDossier.text
-		def setNom(self, nom) : self.__dispDossier.text = nom
+		def getDossier(self) : return self.__dispDossier.text
+		def setDossier(self, nom) : self.__dispDossier.text = nom
 		def getNomB(self) : return self.__dispNomBoite.text
 		def setNomB(self, nomb) : self.__dispNomBoite.text = nomb
 		def getNumB(self) : return self.__dispNumBoite.text
@@ -156,13 +156,13 @@ class Fenetre_modif(swing.JFrame):
 		def setCond(self, cond) : self.__dispCond.text = cond
 		def getGene(self) : return self.__dispGene.text
 		def setGene(self, gene) : self.__dispGene.text = gene
-		def getLigne(self) : return self.__choixLigne
-		def setLigne(self, ligne) : self.__choixLigne = ligne
-		def getCol(self) : return self.__choixCol
-		def setCol(self, col) : self.__choixCol = col
+		def getLigne(self) : return self.__choixLigne.getSelectedItem() 
+		def setLigne(self, ligne) : self.__choixLigne.setSelectedItem(ligne)
+		def getCol(self) : return self.__choixCol.getSelectedItem()
+		def setCol(self, col) : self.__choixCol.setSelectedItem(col)
 
 
-		nom = property(getNom, setNom, doc="  ")
+		dossier = property(getDossier, setDossier, doc="  ")
 		nomb = property(getNomB, setNomB, doc="  ")
 		numb = property(getNumB, setNumB, doc="  ")
 		puit = property(getPuit, setPuit, doc="  ")
@@ -171,45 +171,27 @@ class Fenetre_modif(swing.JFrame):
 		ligne = property(getLigne, setLigne, doc="  ")
 		col = property(getCol, setCol, doc="  ")
 
-# ---------TESTS----------
-
-
-			#menu = swing.JScrollBar(1, 8, 10, 1, 250)
-			#self.contentPane.add(menu)
-
-			#menu = swing.JSpinner()
-			#self.contentPane.add(menu)
-
-			#menu = swing.JSplitPane()
-			#self.contentPane.add(menu)
-
-			#menu = swing.JToolBar("Image",1)
-			#self.contentPane.add(menu)
-
-			#menu = swing.JTree()
-			#self.contentPane.add(menu)
-
-			#menu = swing.RepaintManager()
-			#self.contentPane.add(menu)
-
-			#menu = swing.JPasswordField("")
-			#self.contentPane.add(menu)
-
-			#menu = swing.JTextArea("hello", 1, 8)
-			#self.contentPane.add(menu)
-
-
-#---------FIN TESTS----------
-
 			
 			
 if __name__ == "__main__":
 	fenetre = Fenetre_modif()
 	fenetre.show()
-	print fenetre.nom
-	#print fenetre.nomb
+
 	fenetre.numb = "25"
-	#print fenetre.numb
+	fenetre.nomb = "nomb"
+	fenetre.puit = "puit"
+	fenetre.cond = "cond"
+	fenetre.ligne = "B"
+	fenetre.col = "2"
+	
+	print fenetre.dossier
+	print fenetre.numb
+	print fenetre.nomb
+	print fenetre.puit
+	print fenetre.cond
+	print fenetre.gene
+	print fenetre.ligne
+	print fenetre.col
 	
 	
 	
