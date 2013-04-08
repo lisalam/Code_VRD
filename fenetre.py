@@ -37,6 +37,7 @@ sys.path.append(mypath)
 from ListeImage import ListeImage
 from ListeGene import ListeGene
 from ListeCond import ListeCond
+from ListeWell import ListeWell
 
 from org.python.core import codecs
 codecs.setDefaultEncoding('utf-8')
@@ -148,6 +149,8 @@ class Fenetre(swing.JFrame):
 				if(retour==swing.JFileChooser.APPROVE_OPTION) :
 					self.__selectdir = choix.getSelectedFile().getAbsolutePath()
 					self.__dispDossier.text = self.__selectdir
+
+					
 					
 
 		def __generate(self, event):
@@ -160,14 +163,24 @@ class Fenetre(swing.JFrame):
 				p = ListeGene(self.__selGenes)
 				p.show()
 			else : self.__dispGene.text = self.__selGenes[0]
-			
-			m = ListeCond(self.__selConds)
-			m.show()
-			f = ListeImage(self.__selImages)
-			f.show()
-			h = ListeWell(self.__selWells)
-			h.show()
-			
+
+			if len(self.__selConds) >1 :
+				self.__dispCond.text = ""
+				p = ListeCond(self.__selConds)
+				p.show()
+			else : self.__dispCond.text = self.__selConds[0]
+
+			if len(self.__selWells) >1 :
+				self.__dispWell.text = ""
+				p = ListeWell(self.__selWells)
+				p.show()
+			else : self.__dispWell.text = self.__selWells[0]
+
+			if len(self.__selImages) >1 :
+				self.__dispImage.text = ""
+				p = ListeImage(self.__selImages)
+				p.show()
+			else : self.__dispImage.text = self.__selImages[0]
 			
 
 		def __close(self, event):
@@ -208,12 +221,25 @@ class Fenetre(swing.JFrame):
 		
 		def getNumB(self) : return self.__dispNumBoite.text
 		def setNumB(self, numb) : self.__dispNumBoite.text = numb
-		
+
 		def getPuit(self) : return self.__dispWell.text
-		def setPuit(self, listwell) : self.__dispWell.text = listwell
-		
+		def setPuit(self, listwell) :
+			self.__selWells = listwell
+			if len(listwell) >1 :
+				self.__dispWell.text = ""
+				p = ListeWell(listwell)
+				p.show()
+			else : self.__dispWell.text = listwell[0]
+
 		def getCond(self) : return self.__dispCond.text
-		def setCond(self, listcond) : self.__dispCond.text = listcond
+		def setCond(self, listcond) :
+			self.__selConds = listcond
+			if len(listcond) >1 :
+				self.__dispCond.text = ""
+				p = ListeCond(listcond)
+				p.show()
+			else : self.__dispCond.text = listcond[0]
+		
 		
 		def getGene(self) : return self.__dispGene.text
 		def setGene(self, listgenes) :
@@ -223,6 +249,15 @@ class Fenetre(swing.JFrame):
 				p = ListeGene(listgenes)
 				p.show()
 			else : self.__dispGene.text = listgenes[0]
+
+		def getSelImages(self) : return self.__selImages
+		def setSelImages(self, listselImages) :
+			self.__selImages = listimp
+			if len(listimp) >1 :
+				self.__dispImage.text = ""
+				p = ListeImage(listimp)
+				p.show()
+			else : self.__selImages = listselImages[0]
 		
 		def getLigne(self) : return self.__choixLigne.getSelectedItem() 
 		def setLigne(self, ligne) : self.__choixLigne.setSelectedItem(ligne)
@@ -230,8 +265,7 @@ class Fenetre(swing.JFrame):
 		def getCol(self) : return self.__choixCol.getSelectedItem()
 		def setCol(self, col) : self.__choixCol.setSelectedItem(col)
 		
-		def getSelImages(self) : return self.__selImages
-		def setSelImages(self, listselImages) : self.__selImages = listselImages
+		
 		
 
 		dossier = property(getDossier, setDossier, doc="  ")
@@ -286,7 +320,7 @@ if __name__ == "__main__":
 	gene11 = ("A081")
 	gene12 = ("A089")
 	listgenes=[gene1,gene2,gene3,gene4,gene5,gene6,gene7,gene8,gene9,gene10,gene11,gene12]
-	listgenes=["A123"]
+	#listgenes=["A123"]
 
 
 	listwell=[]
@@ -310,8 +344,8 @@ if __name__ == "__main__":
 
 	fenetre.numb = "25"
 	fenetre.nomb = "20130219_120830_632"
-	fenetre.puit = "B2"
-	fenetre.cond = "LB"
+	fenetre.puit = ["B2"]
+	fenetre.cond = ["LB"]
 	fenetre.ligne = "B"
 	fenetre.col = "2"
 	fenetre.selImages=listimp
