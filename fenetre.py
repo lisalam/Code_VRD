@@ -38,6 +38,8 @@ from ListeImage import ListeImage
 from ListeGene import ListeGene
 from ListeCond import ListeCond
 from ListeWell import ListeWell
+from ListeNomB import ListeNomB
+from ListeNumB import ListeNumB
 
 from org.python.core import codecs
 codecs.setDefaultEncoding('utf-8')
@@ -52,6 +54,8 @@ class Fenetre(swing.JFrame):
 			self.__selGenes=[]
 			self.__selWells=[]
 			self.__selConds=[]
+			self.__selNomb=[]
+			self.__selNumb=[]
 			self.__selectdir = "/Users/lisalamasse/Dropbox/Macros_Lisa/ProjetVRD_Tools"
 			self.run()
 
@@ -72,7 +76,7 @@ class Fenetre(swing.JFrame):
 			Panel1.add(browse)
 
 			grid = awt.GridLayout()
-			grid.setRows(4)
+			grid.setRows(3)
 			grid.setHgap(1)
 			grid.setVgap(1)
 			Panel2=swing.JPanel(grid)
@@ -109,18 +113,7 @@ class Fenetre(swing.JFrame):
 			self.__dispCond = swing.JTextField(preferredSize=(50, 30), horizontalAlignment=swing.SwingConstants.CENTER)
 			self.__dispCond.text = ""
 			Panel2.add(self.__dispCond)
-			label=swing.JLabel("Ligne :", horizontalAlignment=swing.SwingConstants.RIGHT)
-			Panel2.add(label)
-			self.__dispLigne = swing.JTextField(preferredSize=(100, 30), horizontalAlignment=swing.SwingConstants.LEFT)
-			self.__choixLigne = swing.JComboBox( [" ","A", "B", "C","D","E","F","G","H"]) 
-			self.contentPane.add(self.__choixLigne)
-			Panel2.add(self.__choixLigne)
-			label=swing.JLabel("Colonne :", horizontalAlignment=swing.SwingConstants.RIGHT)
-			Panel2.add(label)
-			self.__dispCol = swing.JTextField(preferredSize=(100, 30), horizontalAlignment=swing.SwingConstants.LEFT)
-			self.__choixCol = swing.JComboBox( [" ","1", "2", "3","4","5","6","7","8","9","10","11","12"]) 
-			self.contentPane.add(self.__choixCol)
-			Panel2.add(self.__choixCol)
+			
 			
 			
 			Panel3=swing.JPanel(awt.FlowLayout(awt.FlowLayout.RIGHT))
@@ -154,37 +147,22 @@ class Fenetre(swing.JFrame):
 					
 
 		def __generate(self, event):
-			print "ok"
-			print self.__choixLigne.getSelectedItem() 
-			print self.__choixCol.getSelectedItem()
+			m = ListeCond(self.__selConds)
+			m.show()
+			p = ListeWell(self.__selWells)
+			p.show()
+			v = ListeImage(self.__selImages)
+			v.show()
+			w = ListeNomB(self.__selNomb)
+			w.show()
+			x = ListeNumB(self.__selNumb)
+			x.show()
+			q = ListeGene(self.__selGenes)
+			q.show()
 			
-			if len(self.__selGenes) >1 :
-				self.__dispGene.text = ""
-				p = ListeGene(self.__selGenes)
-				p.show()
-			else : self.__dispGene.text = self.__selGenes[0]
-
-			if len(self.__selConds) >1 :
-				self.__dispCond.text = ""
-				p = ListeCond(self.__selConds)
-				p.show()
-			else : self.__dispCond.text = self.__selConds[0]
-
-			if len(self.__selWells) >1 :
-				self.__dispWell.text = ""
-				p = ListeWell(self.__selWells)
-				p.show()
-			else : self.__dispWell.text = self.__selWells[0]
-
-			if len(self.__selImages) >1 :
-				self.__dispImage.text = ""
-				p = ListeImage(self.__selImages)
-				p.show()
-			else : self.__dispImage.text = self.__selImages[0]
 			
 
 		def __close(self, event):
-			print "ok close"
 			time.sleep(0.01) 
 			self.dispose()
 
@@ -217,53 +195,23 @@ class Fenetre(swing.JFrame):
 		def setDossier(self, nom) : self.__dispDossier.text = nom
 		
 		def getNomB(self) : return self.__dispNomBoite.text
-		def setNomB(self, nomb) : self.__dispNomBoite.text = nomb
+		def setNomB(self, listnomb) : self.__selNomb = listnomb
 		
 		def getNumB(self) : return self.__dispNumBoite.text
-		def setNumB(self, numb) : self.__dispNumBoite.text = numb
+		def setNumB(self, listnumb) : self.__selNumb = listnumb
 
 		def getPuit(self) : return self.__dispWell.text
-		def setPuit(self, listwell) :
-			self.__selWells = listwell
-			if len(listwell) >1 :
-				self.__dispWell.text = ""
-				p = ListeWell(listwell)
-				p.show()
-			else : self.__dispWell.text = listwell[0]
+		def setPuit(self, listwell) : self.__selWells = listwell
 
 		def getCond(self) : return self.__dispCond.text
-		def setCond(self, listcond) :
-			self.__selConds = listcond
-			if len(listcond) >1 :
-				self.__dispCond.text = ""
-				p = ListeCond(listcond)
-				p.show()
-			else : self.__dispCond.text = listcond[0]
-		
+		def setCond(self, listcond) : self.__selConds = listcond
 		
 		def getGene(self) : return self.__dispGene.text
-		def setGene(self, listgenes) :
-			self.__selGenes = listgenes
-			if len(listgenes) >1 :
-				self.__dispGene.text = ""
-				p = ListeGene(listgenes)
-				p.show()
-			else : self.__dispGene.text = listgenes[0]
+		def setGene(self, listgenes) : self.__selGenes = listgenes
 
 		def getSelImages(self) : return self.__selImages
-		def setSelImages(self, listselImages) :
-			self.__selImages = listimp
-			if len(listimp) >1 :
-				self.__dispImage.text = ""
-				p = ListeImage(listimp)
-				p.show()
-			else : self.__selImages = listselImages[0]
-		
-		def getLigne(self) : return self.__choixLigne.getSelectedItem() 
-		def setLigne(self, ligne) : self.__choixLigne.setSelectedItem(ligne)
-		
-		def getCol(self) : return self.__choixCol.getSelectedItem()
-		def setCol(self, col) : self.__choixCol.setSelectedItem(col)
+		def setSelImages(self, listselImages) : self.__selImages = listimp
+			
 		
 		
 		
@@ -274,8 +222,6 @@ class Fenetre(swing.JFrame):
 		puit = property(getPuit, setPuit, doc="  ")
 		cond = property(getCond, setCond, doc="  ")
 		gene = property(getGene, setGene, doc="  ")
-		ligne = property(getLigne, setLigne, doc="  ")
-		col = property(getCol, setCol, doc="  ")
 		selImages = property(getSelImages, setSelImages, doc=" return list of ImagePLus images")
 
 			
@@ -338,6 +284,20 @@ if __name__ == "__main__":
 	well12 = ("A12")
 	listwell=[well1,well2,well3,well4,well5,well6,well7,well8,well9,well10,well11,well12]
 
+	listnomb=[]
+	nom1 = ("20130219_120830_632")
+	nom2 = ("20130219_140840_141")
+	nom3 = ("20130220_104435_275")
+	nom4 = ("20130227_102727_525")
+	listnomb=[nom1,nom2,nom3,nom4]
+
+	listnumb=[]
+	num1= ("1")
+	num2 = ("2")
+	num3 = ("3")
+	num4 = ("4")
+	listnumb=[num1,num2,num3,num4]
+
 
 	fenetre = Fenetre()
 	fenetre.show()
@@ -352,17 +312,17 @@ if __name__ == "__main__":
 	fenetre.gene=listgenes
 	fenetre.puit=listwell
 	fenetre.cond=listcond
+	fenetre.numb=listnumb
+	fenetre.nomb=listnomb
 	
 	
 	print fenetre.dossier
-	print fenetre.numb
-	print fenetre.nomb
-	print fenetre.puit
-	print fenetre.cond
-	print fenetre.gene
-	print fenetre.ligne
-	print fenetre.col
-	print fenetre.selImages
+	print listnomb
+	print listnumb
+	print listwell
+	print listcond
+	print listgenes
+	print listimp
 	
 	
 	
