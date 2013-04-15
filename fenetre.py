@@ -118,12 +118,15 @@ class Fenetre(swing.JFrame):
 			
 			Panel3=swing.JPanel(awt.FlowLayout(awt.FlowLayout.RIGHT))
 			Panel3.setBorder(line)
+			View = swing.JButton("View Images", size=(100, 70), actionPerformed=self.__View)
+			Panel3.add(View)
 			generate = swing.JButton("Generate", size=(100, 70), actionPerformed=self.__generate)
 			Panel3.add(generate)
 			close = swing.JButton("Close", size=(100, 70), actionPerformed=self.__close)
 			Panel3.add(close)
 			help = swing.JButton("Help", size=(100, 70), actionPerformed=self.__help)
 			Panel3.add(help)
+			
 			
 
 			self.contentPane.add(Panel1, awt.BorderLayout.NORTH)
@@ -143,7 +146,9 @@ class Fenetre(swing.JFrame):
 					self.__selectdir = choix.getSelectedFile().getAbsolutePath()
 					self.__dispDossier.text = self.__selectdir
 
-					
+		def __View(self, event):
+			v = ListeImage(self.__selImages)
+			v.show()		
 					
 
 		def __generate(self, event):
