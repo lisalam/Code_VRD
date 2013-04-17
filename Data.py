@@ -4,6 +4,7 @@ import sys
 import os
 import os.path as path
 import getpass
+import re
 
 
 username=getpass.getuser()
@@ -30,6 +31,7 @@ class Data(object):
 		self.__dicoCond = dict()
 		self.__flagdicoCond = 0
 		self.__flagdicoGene = 0
+		self.dicolignes = dict()
 		
 		print self.__run()		
 
@@ -38,12 +40,15 @@ class Data(object):
 	def __run(self) :
 
 		if self.__getlisteboites()== "erreur dossiers" : return "erreur dossiers"
-		else : self.__listeboites=self.__getlisteboites() 
+		else : self.__listeboites=self.__getlisteboites()
 			
 		if self.__getdicoText() == "erreur dossiers" : return "erreur dossiers"
 		else : 	self.__dicoText = self.__getdicoText() # dans la fonction run, remplir le dictionnaire si il n'y pas "erreur dossiers"
+
+		self.__makedicolignes()
 		
-		if self.__GenerateTitre() == "erreur dans les colonnes" : "erreur dans les colonnes"
+		if self.__GenerateTitre() == "erreur dans les colonnes" : return "erreur dans les colonnes"
+		else : pass
 
 		if self.__getdicoGene() == "erreur dossiers" : return "erreur dossiers"
 		else : self.__dicoGene = self.__getdicoGene()
@@ -70,7 +75,7 @@ class Data(object):
 		
 		tempdico=dict()
 		for b in self.__listeboites :
-			dicolignes = self.getdicolignes(b) # recupere le dictionnaire pour la boite avec ttes les lignes du fichier texte
+			dicolignes = self.dicolignes[b] # recupere le dictionnaire pour la boite avec ttes les lignes du fichier texte
 			listecond=list()
 			enscond=set()
 			for i in range(1, len(dicolignes)-1) :
@@ -135,10 +140,9 @@ class Data(object):
 
 	def __getdicoGene(self): 
 		self.__flagdicoGene = 1
-		
 		tempdico=dict()
 		for boite in self.__listeboites :
-			dicolignes = self.getdicolignes(boite) # recupere le dictionnaire pour la boite avec ttes les lignes du fichier texte
+			dicolignes =  self.dicolignes[boite] # recupere le dictionnaire pour la boite avec ttes les lignes du fichier texte
 			listegene=list()
 			ensgene=set()
 			for i in range(1, len(dicolignes)-1) :
@@ -149,19 +153,21 @@ class Data(object):
 		return tempdico
 			
 
-	def getdicolignes(self, boite) :
-		f = self.__dicoText[boite]
-		fichier = open(f,"r") #ouvrir le fichier en lecture seule
-		alllines=fichier.readlines() # lire toutes les lignes du fichier
-		sep=self.getLineSep(alllines[0])
-		alllines=alllines[0].split(sep) # on veut lire la première ligne [0] et séparer les éléments de la ligne (ici le fichier excel fait que l'on a qu'une ligne dans tout le fichier)
-		dicolignes=dict() # création d'un dictionnaire pour les lignes
-		for i in range(0,len(alllines)): # boucle avec index
-			ligne=alllines[i].split("\t")
-			dicolignes[i]=ligne # ligne est une liste pour laquelle chaque valeur est une des colonnes du fichier texte initial
-			#if i< 10 : print boite, i, ligne
-			#if i > 860 : print boite, i, ligne
-		return dicolignes # renvoi un dictionaire pour boite donnée avec toute les lignes sous forme de liste du fichier texte, la clé est le n° de ligne
+	def __makedicolignes(self) :
+		
+		for boite in self.__listeboites :
+			f = self.__dicoText[boite]
+			fichier = open(f,"r") #ouvrir le fichier en lecture seule
+			alllines=fichier.readlines() # lire toutes les lignes du fichier renvoi une liste avec tout le fichier
+			alllines = "".join(alllines)
+			alllines = alllines.replace(" ","_")
+			alllines=re.split("[(\r\n), (\r), (\n), (\n\r)]+", alllines)
+			dicolignes=dict() # création d'un dictionnaire pour les lignes
+			for i in range(0,len(alllines)): # boucle avec index
+				ligne=alllines[i].split("\t")
+				if len(ligne) >1 : dicolignes[i]=ligne # ligne est une liste pour laquelle chaque valeur est une des colonnes du fichier texte initial
+
+			self.dicolignes[boite] = dicolignes
 
 	def __getlisteboites(self):		
 		tempboites=os.listdir(self.__projet) # récupération listes de dossiers et des fichiers
@@ -171,65 +177,90 @@ class Data(object):
 
 
 	def __GenerateTitre(self): # création de constantes qui seront fixes, pour pas appeler à chaque fois le numéro de la colonne qui nous interesse
-		dicolignes = self.getdicolignes(self.__listeboites[0])
+		dicolignes = self.dicolignes[self.__listeboites[0]]
 		titre=dicolignes[0]
-		for i in range(len(titre)):
-			if titre[i]=="Jobrun Folder": 
-				self.COL_FOLDER = i 
+#		print titre
+#		for v in titre : print v
+		for i in range(0,len(titre)):
+#			print i
+			if titre[i]=="Jobrun_Folder": 
+				self.COL_FOLDER = i
+				#print i,  "Jobrun Folder"
 				continue
 			if titre[i]=="Condition": 
 				self.COL_COND = i
+				#print i,  "Condition"
 				continue
-			if titre[i]=="Jobrun Name": 
+			if titre[i]=="Jobrun_Name": 
 				self.COL_JOBRUNNAME = i
+				#print i,  "Jobrun Name"
 				continue
-			if titre[i]=="File Name": 
+			if titre[i]=="File_Name": 
 				self.COL_FILENAME = i
+				#print i,  "File Name"
 				continue
-			if titre[i]=="Frame Time": 
+			if titre[i]=="Frame_Time": 
 				self.COL_FRAMETIME = i
-				continue
-			if titre[i]=="numero de boite": 
-				self.COL_NUMEROBOITE = i
+				#print i,  "Frame Time"
 				continue
 			if titre[i]=="Genes": 
 				self.COL_GENES = i
-				continue
+				#print i,  "Genes"
+				continue			
 			if titre[i]=="Well": 
 				self.COL_WELL = i
-				continue
-			if titre[i]=="Well Index": 
+				#print i,  "Well"
+				continue			
+			if titre[i]=="Well_Index": 
 				self.COL_WELLINDEX = i
+				#print i,  "Well Index"
 				continue
-			if titre[i]=="PointLoop Index": 
+			if titre[i]=="PointLoop_Index": 
 				self.COL_POINTLOOPINDEX = i
+				#print i,  "PointLoop Index"
 				continue
-			if titre[i]=="WellLoop Index": 
+			if titre[i]=="WellLoop_Index": 
 				self.COL_WELLLOOPINDEX = i
+				#print i,  "WellLoop Index"
 				continue
 			if titre[i]=="X": 
 				self.COL_X = i
+				#print i,  "X"
 				continue
 			if titre[i]=="Y": 
 				self.COL_Y = i
+				#print i,  "Y"
 				continue
 			if titre[i]=="Z1": 
 				self.COL_Z1 = i
+				#print i,  "Z1"
 				continue
-			if titre[i]=="Frame Index": 
+			if titre[i]=="Frame_Index": 
 				self.COL_FRAMEINDEX = i
+				#print i,  "Frame Index"
 				continue
+			if titre[i]=="TimeLapse_Index": 
+				self.COL_TLINDEX = i
+				#print i,  "TimeLapse Index"
+				continue
+			if titre[i]=="numerodeboite": 
+				self.COL_NUMEROBOITE = i
+				#print i,  "numerodeboite"
+				continue			
 			if titre[i]=="plateRow": 
 				self.COL_LIGNE = i
+				#print i,  "plateRow"
 				continue
 			if titre[i]=="plateColumn": 
 				self.COL_COL = i
-				continue
-			if titre[i]=="UIDs": 
+				#print i,  "plateColumn"
+				continue				
+			if titre[i].split("\r")[0]=="UIDs": 
 				self.COL_UIDS = i
+				#print i,  "UIDs"
 				continue
 
-		else : return "erreur dans les colonnes"
+		else : return "erreur dans les colonnes "+str(i)
 
 		return "ok"
 
@@ -254,7 +285,7 @@ class Data(object):
 	dicoC=property(__getdicoCond, doc="dictionnaire ...=")    #renvoi un dictionnaire avec comme clé toutes les boites et en valeur tous les conditions
 	listB=property(__getlisteboites, doc="liste ...=")        #renvoi une liste avec toutes les boites du projet (= dossier)
 	dicoNumB=property(__getdicoNumBoite, doc="dictionnaire ...=") #renvoi un dictionnaire avec comme clé toutes les boites et en valeur les n° et les noms des boites
-	dicoNomB=property(__getdicoNomBoite, doc="dictionnaire ...=")	#renvoi un dictionnaire avec comme clé tous les n° des boites et en valeur les n° et les noms des boites		
+	dicoNomB=property(__getdicoNomBoite, doc="dictionnaire ...=")	#renvoi un dictionnaire avec comme clé tous les n° des boites et en valeur les n° et les noms des boites
 	
 # **************** Fin de la classe Data *****************
 
@@ -264,18 +295,18 @@ class Data(object):
 #   TEST DE LA CLASSE  
 
 if __name__ == "__main__" :
-	data=Data("/Users/lisalamasse/Dropbox/Macros_Lisa/ProjetVRD_Tools")
-	print "dicoG", data.dicoG
-	print "----- fin dicoG -----"
-	print data.dicoC
-	print "----- fin dicoC -----"
-	print data.listB
-	print "----- fin listB -----"
-	print data.dicoNumB
-	print "----- fin dicoNumB -----"
-	print data.dicoNomB
-	print "----- fin dicoNomB -----"
-	print data.dicoLignes
+	data=Data("/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1")
+	#print "dicoG", data.dicoG
+	#print "----- fin dicoG -----"
+	#print data.dicoC
+	#print "----- fin dicoC -----"
+	#print data.listB
+	#print "----- fin listB -----"
+	#print data.dicoNumB
+	#print "----- fin dicoNumB -----"
+	#print data.dicoNomB
+	#print "----- fin dicoNomB -----"
+	#print data.dicolignes["20130410_183703_374"]
 	
 
 	

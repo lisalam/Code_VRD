@@ -40,6 +40,9 @@ from ListeCond import ListeCond
 from ListeWell import ListeWell
 from ListeNomB import ListeNomB
 from ListeNumB import ListeNumB
+from Boite import Boite
+from Data import Data
+from Well import Well
 
 from org.python.core import codecs
 codecs.setDefaultEncoding('utf-8')
@@ -88,7 +91,7 @@ class Fenetre(swing.JFrame):
 			label=swing.JLabel("Nom de la boite : ", horizontalAlignment=swing.SwingConstants.RIGHT)
 			Panel2.add(label)
 			self.__dispNomBoite = swing.JTextField(preferredSize=(200, 30), horizontalAlignment=swing.SwingConstants.CENTER)
-			self.__dispNomBoite.text = "20130227_102727_525"
+			self.__dispNomBoite.text = ""
 			Panel2.add(self.__dispNomBoite)
 			label=swing.JLabel("Numero de la boite : ", horizontalAlignment=swing.SwingConstants.RIGHT)
 			Panel2.add(label)
@@ -176,13 +179,12 @@ class Fenetre(swing.JFrame):
 			uneboite = Boite(boite, projet)
 			dicowell = uneboite.dicoW
 
-			listcles = dicowell.keys()
-			listcles.sort()
+			listecles = dicowell.keys()
+			listecles.sort()
 			listevals = []
-			for cle in listecles :
-				listevals.append(dicowell[cle])
+			for cle in listecles : listevals.append("\t,\t".join([dicowell[cle][0].code, dicowell[cle][1], dicowell[cle][2]]))
 			# on affiche on utilasant ListeWell
-			p = ListeWell(listevals)
+			p = ListeWell(listevals[0:-2])
 			p.show()
 
 		def __help(self, event):
@@ -214,7 +216,9 @@ class Fenetre(swing.JFrame):
 		def setDossier(self, nom) : self.__dispDossier.text = nom
 		
 		def getNomB(self) : return self.__dispNomBoite.text
-		def setNomB(self, listnomb) : self.__selNomb = listnomb
+		def setNomB(self, listnomb) : 
+			self.__dispNomBoite.text = listnomb
+			self.__selNomb = listnomb
 		
 		def getNumB(self) : return self.__dispNumBoite.text
 		def setNumB(self, listnumb) : self.__selNumb = listnumb
@@ -247,105 +251,10 @@ class Fenetre(swing.JFrame):
 			
 if __name__ == "__main__":
 
+
+
 	fenetre = Fenetre()
+	fenetre.dossier = "/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1"
+	fenetre.nomb = ""
 	fenetre.show()
-
-	listimp=[]
-	imp1 = ImagePlus("/Users/lisalamasse/Dropbox/Macros_Lisa/ManipsTM/cells/cell0000.tif")
-	imp2 = ImagePlus("/Users/lisalamasse/Dropbox/Macros_Lisa/ManipsTM/cells/cell0001.tif")
-	imp3 = ImagePlus("/Users/lisalamasse/Dropbox/Macros_Lisa/ManipsTM/cells/cell0002.tif")
-	imp4 = ImagePlus("/Users/lisalamasse/Dropbox/Macros_Lisa/ManipsTM/cells/cell0003.tif")
-	imp5 = ImagePlus("/Users/lisalamasse/Dropbox/Macros_Lisa/ManipsTM/cells/cell0004.tif")
-	imp6 = ImagePlus("/Users/lisalamasse/Dropbox/Macros_Lisa/ManipsTM/cells/cell0005.tif")
-	imp7 = ImagePlus("/Users/lisalamasse/Dropbox/Macros_Lisa/ManipsTM/cells/cell0006.tif")
-	imp8 = ImagePlus("/Users/lisalamasse/Dropbox/Macros_Lisa/ManipsTM/cells/cell0007.tif")
-	imp9 = ImagePlus("/Users/lisalamasse/Dropbox/Macros_Lisa/ManipsTM/cells/cell0008.tif")
-	imp10 = ImagePlus("/Users/lisalamasse/Dropbox/Macros_Lisa/ManipsTM/cells/cell0009.tif")
-	imp11 = ImagePlus("/Users/lisalamasse/Dropbox/Macros_Lisa/ManipsTM/cells/cell0010.tif")
-	imp12 = ImagePlus("/Users/lisalamasse/Dropbox/Macros_Lisa/ManipsTM/cells/cell0011.tif")
-	listimp=[imp1,imp2,imp3, imp4, imp5, imp6, imp7, imp8, imp9, imp10, imp11, imp12 ]
-
-
-	listcond=[]
-	cond1 = ("LB")
-	cond2 = ("Glucose")
-	cond3 = ("Succinate")
-	cond4 = ("Gluconate")
-	listcond=[cond1,cond2,cond3,cond4]
-
-
-	listgenes=[]
-	gene1 = ("A579")
-	gene2 = ("A009")
-	gene3 = ("A017")
-	gene4 = ("A025")
-	gene5 = ("A033")
-	gene6 = ("A041")
-	gene7 = ("A049")
-	gene8 = ("A057")
-	gene9 = ("A065")
-	gene10 = ("A073")
-	gene11 = ("A081")
-	gene12 = ("A089")
-	listgenes=[gene1,gene2,gene3,gene4,gene5,gene6,gene7,gene8,gene9,gene10,gene11,gene12]
-	#listgenes=["A123"]
-
-
-	listwell=[]
-	well1 = ("A1")
-	well2 = ("A2")
-	well3 = ("A3")
-	well4 = ("A4")
-	well5 = ("A5")
-	well6 = ("A6")
-	well7 = ("A7")
-	well8 = ("A8")
-	well9 = ("A9")
-	well10 = ("A10")
-	well11 = ("A11")
-	well12 = ("A12")
-	listwell=[well1,well2,well3,well4,well5,well6,well7,well8,well9,well10,well11,well12]
-
-	listnomb=[]
-	nom1 = ("20130219_120830_632")
-	nom2 = ("20130219_140840_141")
-	nom3 = ("20130220_104435_275")
-	nom4 = ("20130227_102727_525")
-	listnomb=[nom1,nom2,nom3,nom4]
-
-	listnumb=[]
-	num1= ("1")
-	num2 = ("2")
-	num3 = ("3")
-	num4 = ("4")
-	listnumb=[num1,num2,num3,num4]
-
-
-	#fenetre = Fenetre()
-	#fenetre.show()
-
-	fenetre.numb = "25"
-	fenetre.nomb = "20130219_120830_632"
-	fenetre.puit = ["B2"]
-	fenetre.cond = ["LB"]
-	fenetre.ligne = "B"
-	fenetre.col = "2"
-	fenetre.selImages=listimp
-	fenetre.gene=listgenes
-	fenetre.puit=listwell
-	fenetre.cond=listcond
-	fenetre.numb=listnumb
-	fenetre.nomb=listnomb
-	
-	
-	print fenetre.dossier
-	print listnomb
-	print listnumb
-	print listwell
-	print listcond
-	print listgenes
-	print listimp
-	
-	
-	
 	

@@ -7,7 +7,7 @@ from javax.swing import BorderFactory
 from javax.swing.border import EtchedBorder, TitledBorder
 from java.awt import Font
 
-
+from java.awt import TextField, Panel, GridLayout, ComponentOrientation, Label, Checkbox, BorderLayout, Button, Color, FileDialog, Frame, Font
 
 
 import sys
@@ -29,54 +29,54 @@ from org.python.core import codecs
 codecs.setDefaultEncoding('utf-8')
 
 
-class ListeCond(swing.JFrame, swing.Scrollable):
+class ListeCond(swing.JFrame):
 
-		def __init__(self, listcond):
-			swing.JFrame.__init__(self, title="Conditions")
-			self.setDefaultCloseOperation(swing.JFrame.DISPOSE_ON_CLOSE)
-			self.__listcond = listcond
-			self.run()
+				def __init__(self, listcond):
+					swing.JFrame.__init__(self, title="Conditions")
+					self.setDefaultCloseOperation(swing.JFrame.DISPOSE_ON_CLOSE)
+					self.__listcond = listcond
+					self.run()
 
-		def run(self):
-			self.size = (200, 400)
-			self.contentPane.layout = awt.BorderLayout()
-			line = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)
+				def run(self):
+					self.size = (200, 400)
+					self.contentPane.layout = awt.BorderLayout()
+					line = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)
 
 
-			Panel1=swing.JPanel(awt.FlowLayout(awt.FlowLayout.CENTER))
-			Panel1.setBorder(line)
-			label=swing.JLabel("")
-			label.setText("Liste des Conditions")
-			Panel1.add(label)
+					Panel1=swing.JPanel(awt.FlowLayout(awt.FlowLayout.CENTER))
+					Panel1.setBorder(line)
+					label=swing.JLabel("")
+					label.setText("Liste des Conditions")
+					Panel1.add(label)
 			
-			Panel2=swing.JPanel(awt.FlowLayout(awt.FlowLayout.CENTER))
-			Panel2.setBorder(line)
-			self.__listcond = swing.JList(listcond)
-			Panel2.add(self.__listcond)
-			barre = swing.JScrollPane(self.__listcond)
-			Panel2.add(barre)
-			
-			
-			Panel3=swing.JPanel(awt.FlowLayout(awt.FlowLayout.RIGHT))
-			Panel3.setBorder(line)
-			select = swing.JButton("Select", actionPerformed=self.__select)
-			Panel3.add(select)
-			close = swing.JButton("Close", size=(100, 70), actionPerformed=self.__close)
-			Panel3.add(close)
-			
-			self.contentPane.add(Panel1, awt.BorderLayout.NORTH)
-			self.contentPane.add(Panel2, awt.BorderLayout.CENTER)
-			self.contentPane.add(Panel3, awt.BorderLayout.SOUTH)
+					Panel2=swing.JPanel(awt.FlowLayout(awt.FlowLayout.CENTER))
+					Panel2.setBorder(line)
+					self.__displistcond = swing.JList(self.__listcond)
+					Panel2.add(self.__displistcond)
+					barre = swing.JScrollPane(self.__displistcond)
+					Panel2.add(barre)
 			
 			
+					Panel3=swing.JPanel(awt.FlowLayout(awt.FlowLayout.RIGHT))
+					Panel3.setBorder(line)
+					select = swing.JButton("Select", actionPerformed=self.__select)
+					Panel3.add(select)
+					close = swing.JButton("Close", size=(100, 70), actionPerformed=self.__close)
+					Panel3.add(close)
 			
-		def __select(self, event):
-			print self.__listcond.getSelectedValues()	
+					self.contentPane.add(Panel1, awt.BorderLayout.NORTH)
+					self.contentPane.add(Panel2, awt.BorderLayout.CENTER)
+					self.contentPane.add(Panel3, awt.BorderLayout.SOUTH)
+			
+			
+			
+				def __select(self, event):
+					print self.__listcond.getSelectedValues()	
 	
 
-		def __close(self, event):
-			time.sleep(0.01) 
-			self.dispose()
+				def __close(self, event):
+					time.sleep(0.01) 
+					self.dispose()
 
 
 			

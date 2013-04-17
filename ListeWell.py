@@ -7,7 +7,7 @@ from javax.swing import BorderFactory
 from javax.swing.border import EtchedBorder, TitledBorder
 from java.awt import Font
 
-
+from java.awt import TextField, Panel, GridLayout, ComponentOrientation, Label, Checkbox, BorderLayout, Button, Color, FileDialog, Frame, Font
 
 import sys
 import os
@@ -28,7 +28,7 @@ from org.python.core import codecs
 codecs.setDefaultEncoding('utf-8')
 
 
-class ListeWell(swing.JFrame, swing.Scrollable):
+class ListeWell(swing.JFrame):
 
 				def __init__(self, listwell):
 					swing.JFrame.__init__(self, title="Well")
@@ -37,7 +37,7 @@ class ListeWell(swing.JFrame, swing.Scrollable):
 					self.run()
 
 				def run(self):
-					self.size = (200, 400)
+					self.size = (200, 600)
 					self.contentPane.layout = awt.BorderLayout()
 					line = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)
 
@@ -51,10 +51,13 @@ class ListeWell(swing.JFrame, swing.Scrollable):
 					
 					Panel2=swing.JPanel(awt.FlowLayout(awt.FlowLayout.CENTER))
 					Panel2.setBorder(line)
-					self.__listwell = swing.JList(listwell)
-					Panel2.add(self.__listwell)
-					barre = swing.JScrollPane(self.__listwell)
+					self.__displistwell = swing.JList(self.__listwell)
+					self.__displistwell.setVisibleRowCount(28)
+					self.__displistwell.setFixedCellWidth(150) 
+					Panel2.add(self.__displistwell)
+					barre = swing.JScrollPane(self.__displistwell)
 					Panel2.add(barre)
+					
 					
 					Panel3=swing.JPanel(awt.FlowLayout(awt.FlowLayout.RIGHT))
 					Panel3.setBorder(line)

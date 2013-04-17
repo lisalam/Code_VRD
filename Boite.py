@@ -62,23 +62,23 @@ class Boite(object):
 			
 	def __getdicoWell(self):
 		tempdict = dict()
-		dicolignes = self.__data.getdicolignes(self.__nomboite)
+		dicolignes = self.__data.dicolignes[self.__nomboite] # recuperation du fichier texte labels sous forme de dictionnaire pour la boite en cours
 		ensTotal = set()
 		ensLignes = set()
-		for val in self.PUITS_96() : ensTotal.add(val.code)
-
+		for val in self.PUITS_96() : ensTotal.add(val.code) #ensemble des codes = ensemble de strings
 		for val in dicolignes.values() :
-			tempcode = val[self.__data.COL_WELL]
-			w = Well(code=tempcode)
-			cond = val[self.__data.COL_COND]
-			gene = val[self.__data.COL_GENES]
+			if val != "Well" :
+				tempcode = val[self.__data.COL_WELL]
+				w = Well(code=tempcode)				#objet classe Well
+				cond = val[self.__data.COL_COND]
+				gene = val[self.__data.COL_GENES]
 			
-			ensLignes.add(w.code)
-			tempdict[w.code]=(w, cond, gene)
+				ensLignes.add(w.code)				# ensemble des codes = strings
+				tempdict[w.code]=(w, cond, gene)
 
 		ensInter =ensTotal.difference(ensLignes)
 
-		for w in ensInter : tempdict[w.code]=(w, "NA", "NA")
+		for w in ensInter : tempdict[w]=(Well(code=w), "NA", "NA")
 
 		return tempdict
 		
@@ -126,15 +126,16 @@ class Boite(object):
 # TEST DE LA CLASSE
 
 if __name__ == "__main__" :
-	boite=Boite("20130227_102727_525", "/Users/lisalamasse/Dropbox/Macros_Lisa/ProjetVRD_Tools")
-	print boite.genes
-	print boite.conds
-	print boite.dicoW
-	print boite.nom
-	print boite.projet
-	print Boite.PUITS_96()
+	boite=Boite("20130410_162617_825", "/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1")
+	#boite=Boite("20130410_183703_374", "/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1")
+	print boite.genes[0:3]
+	print boite.conds[0:3]
+	print boite.dicoW.items()[0]
+	#print boite.nom
+	#print boite.projet
+	#print Boite.PUITS_96()
 
 
-	print boite.dicoW["B12"][0].code , boite.dicoW["B12"][0].LC, boite.dicoW["B12"][1], boite.dicoW["B12"][2]
+	#print boite.dicoW["B12"][0].code , boite.dicoW["B12"][0].LC, boite.dicoW["B12"][1], boite.dicoW["B12"][2]
 
 

@@ -36,6 +36,11 @@ class Well():
 		elif param.keys()[0] == "code" : self.__calculerLC(param["code"])
 		else : self.__calculerCode(param["lc"])
 
+		self.__boite = ""
+		self.__projet = ""
+		self.__dicolignes = dict()
+
+
 	def __calculerCode(self,lc) :
 		l = string.uppercase[int(lc[0])-1]
 		c = str(lc[1])
@@ -50,6 +55,25 @@ class Well():
 		self.__LC = lc
 		self.__code = code
 
+	def __getImagesPaths(self, projet, boite, puit) :
+		if projet != self.__projet : 
+			self.__data = Data(projet)
+			self.__projet = projet
+		if boite != self.__boite : 
+			self.__dicolignes = self.__data.dicolignes[boite]
+			self.__boite = boite
+		
+		templist = []
+		for v in self.__dicolignes.values() :
+			if v[self.__data.COL_WELL] == puit :
+				templist.append(v[self.COL_FILENAME])
+
+		return templist
+				
+		
+		
+	
+
 	def __getCode(self) : return self.__code
 	def __getLC(self) : return self.__LC
 
@@ -59,6 +83,7 @@ class Well():
 
 	code = property(__getCode, setCode, doc="ma doc ... =")
 	LC = property(__getLC, setLC, doc="ma doc ... =")
+	imagespaths = property(__getImagesPaths, doc="liste des images d'un puits")
 
 
 print "--- debut ---"

@@ -7,7 +7,7 @@ from javax.swing import BorderFactory
 from javax.swing.border import EtchedBorder, TitledBorder
 from java.awt import Font
 
-
+from java.awt import TextField, Panel, GridLayout, ComponentOrientation, Label, Checkbox, BorderLayout, Button, Color, FileDialog, Frame, Font
 
 import sys
 import os
@@ -28,7 +28,7 @@ from org.python.core import codecs
 codecs.setDefaultEncoding('utf-8')
 
 
-class ListeImage(swing.JFrame, swing.Scrollable):
+class ListeImage(swing.JFrame):
 
 		def __init__(self, listimp):
 			swing.JFrame.__init__(self, title="Images")
