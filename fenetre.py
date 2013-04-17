@@ -45,6 +45,8 @@ from org.python.core import codecs
 codecs.setDefaultEncoding('utf-8')
 
 
+
+
 class Fenetre(swing.JFrame):
 
 		def __init__(self):
@@ -118,8 +120,10 @@ class Fenetre(swing.JFrame):
 			
 			Panel3=swing.JPanel(awt.FlowLayout(awt.FlowLayout.RIGHT))
 			Panel3.setBorder(line)
-			View = swing.JButton("View Images", size=(100, 70), actionPerformed=self.__View)
-			Panel3.add(View)
+
+			#on ajoute un bouton qui affiche le contenu de tous les wells d'une boite quelque soient les autres filtres, il utilise la calsse Boite
+			viewWells = swing.JButton("View all Wells", size=(100, 70), actionPerformed=self.__viewWells)
+			Panel3.add(viewWells)
 			generate = swing.JButton("Generate", size=(100, 70), actionPerformed=self.__generate)
 			Panel3.add(generate)
 			close = swing.JButton("Close", size=(100, 70), actionPerformed=self.__close)
@@ -127,14 +131,11 @@ class Fenetre(swing.JFrame):
 			help = swing.JButton("Help", size=(100, 70), actionPerformed=self.__help)
 			Panel3.add(help)
 			
-			
-
 			self.contentPane.add(Panel1, awt.BorderLayout.NORTH)
 			self.contentPane.add(Panel2, awt.BorderLayout.CENTER)
 			self.contentPane.add(Panel3, awt.BorderLayout.SOUTH)
 
-			
-			
+		
 		def __browse(self, event):
 				IJ.showMessage("Select project directory")
 				self.__selectdir=IJ.getDirectory("image")
@@ -145,11 +146,6 @@ class Fenetre(swing.JFrame):
 				if(retour==swing.JFileChooser.APPROVE_OPTION) :
 					self.__selectdir = choix.getSelectedFile().getAbsolutePath()
 					self.__dispDossier.text = self.__selectdir
-
-		def __View(self, event):
-			v = ListeImage(self.__selImages)
-			v.show()		
-					
 
 		def __generate(self, event):
 			m = ListeCond(self.__selConds)
@@ -170,6 +166,24 @@ class Fenetre(swing.JFrame):
 		def __close(self, event):
 			time.sleep(0.01) 
 			self.dispose()
+
+		def __viewWells(self, event):
+			# on genere une Boite avec les contenus des champs nom de boite et dossier
+			boite=self.__dispNomBoite.text
+			projet=self.__dispDossier.text
+
+			# on recupere le dicowell et on classe les cles et on cree une liste des valeurs classees
+			uneboite = Boite(boite, projet)
+			dicowell = uneboite.dicoW
+
+			listcles = dicowell.keys()
+			listcles.sort()
+			listevals = []
+			for cle in listecles :
+				listevals.append(dicowell[cle])
+			# on affiche on utilasant ListeWell
+			p = ListeWell(listevals)
+			p.show()
 
 		def __help(self, event):
 			IJ.log("""
@@ -232,6 +246,9 @@ class Fenetre(swing.JFrame):
 			
 			
 if __name__ == "__main__":
+
+	fenetre = Fenetre()
+	fenetre.show()
 
 	listimp=[]
 	imp1 = ImagePlus("/Users/lisalamasse/Dropbox/Macros_Lisa/ManipsTM/cells/cell0000.tif")
@@ -304,8 +321,8 @@ if __name__ == "__main__":
 	listnumb=[num1,num2,num3,num4]
 
 
-	fenetre = Fenetre()
-	fenetre.show()
+	#fenetre = Fenetre()
+	#fenetre.show()
 
 	fenetre.numb = "25"
 	fenetre.nomb = "20130219_120830_632"
@@ -331,6 +348,4 @@ if __name__ == "__main__":
 	
 	
 	
-	
-
 	
