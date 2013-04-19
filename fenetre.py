@@ -151,18 +151,33 @@ class Fenetre(swing.JFrame):
 					self.__dispDossier.text = self.__selectdir
 
 		def __generate(self, event):
-			m = ListeCond(self.__selConds)
+
+			self.__controleur.setData(Projet = self.__dispDossier.text, Nom_Boite = self.__dispNomBoite.text, Wells = self.__dispWell.text)
+			self.__controleur.decisionTree()
+			dicoEnsEnd = self.__controleur.dicoEnsEnd
+			
+			m = ListeCond(list(dicoEnsEnd["Condition"]))
 			m.show()
-			p = ListeWell(self.__selWells)
+			p = ListeWell(list(dicoEnsEnd["Wells"]))
 			p.show()
-			v = ListeImage(self.__selImages)
-			v.show()
-			w = ListeNomB(self.__selNomb)
+			
+			w = ListeNomB(list(dicoEnsEnd["Nom_Boite"]))
 			w.show()
-			x = ListeNumB(self.__selNumb)
+			
+			x = ListeNumB(list(dicoEnsEnd["Num_Boite"]))
 			x.show()
-			q = ListeGene(self.__selGenes)
+			
+			q = ListeGene(list(dicoEnsEnd["Genes"]))
 			q.show()
+
+			listimp = []
+			
+			for v in dicoEnsEnd["Images"] :
+				imp = ImagePlus(v)
+				listimp.append(imp)
+
+			v = ListeImage(listimp)
+			v.show()
 			
 			
 
@@ -250,6 +265,6 @@ if __name__ == "__main__":
 
 	fenetre = Fenetre()
 	fenetre.dossier = "/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1"
-	fenetre.nomb = ""
+	fenetre.nomb = "20130410_162617_825"
 	fenetre.show()
 	

@@ -184,7 +184,7 @@ class Controleur(object):
 					
 				self.__dicoEnsEnd["Images"] = set([str(self.__dicoDatas[self.__IMAGES])])
 
-				print self.__dicoEnsEnd
+				#print self.__dicoEnsEnd
 
 		return True
 
@@ -209,14 +209,17 @@ class Controleur(object):
 		gene= [tuplewell[2]]
 		listimages = tuplewell[0].getImagesPaths(self.__dicoDatas[self.__PROJET], self.__dicoDatas[self.__NOM_BOITE], codewell)
 		return [cond, gene, listimages]
-		
 
+	def __getdicoEnsEnd(self) : return self.__dicoEnsEnd
+	
+	dicoEnsEnd = property(__getdicoEnsEnd, doc="dictionnaire  ... =")
 
 if __name__ == "__main__":
 
 	c = Controleur()
-	c.setData(Projet = "/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1", Nom_Boite = "20130410_162617_825", Wells = "A7", Images = "/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1/20130410_162617_825/Time00000_WellB03_Point0010_Seq0314.tif")
+	c.setData(Projet = "/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1", Nom_Boite = "20130410_162617_825", Wells = "A7")
 	c.decisionTree()
+	print c.dicoEnsEnd
 	#c.viewWells("20130410_162617_825", "/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1")
 	
 
