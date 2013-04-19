@@ -30,6 +30,7 @@ class Boite(object):
 		self.__dicoWell = dict()
 		self.__projet = projet
 		self.__data = Data(self.__projet)
+		self.__dicolignes = None
 		
 
 		print self.__run()
@@ -58,15 +59,18 @@ class Boite(object):
 	def __getlistCond(self):
 		temp = self.__data.dicoC
 		return temp[self.__nomboite]
-		
+
+	def __getdicoLignes(self): 
+		self.__dicolignes  = self.__data.dicolignes[self.__nomboite] # recuperation du fichier texte labels sous forme de dictionnaire pour la boite en cours
+		return self.__dicolignes
 			
 	def __getdicoWell(self):
 		tempdict = dict()
-		dicolignes = self.__data.dicolignes[self.__nomboite] # recuperation du fichier texte labels sous forme de dictionnaire pour la boite en cours
+		if self.__dicolignes == None : self.__dicolignes = self.__getdicoLignes() # recuperation du fichier texte labels sous forme de dictionnaire pour la boite en cours
 		ensTotal = set()
 		ensLignes = set()
 		for val in self.PUITS_96() : ensTotal.add(val.code) #ensemble des codes = ensemble de strings
-		for val in dicolignes.values() :
+		for val in self.__dicolignes.values() :
 			if val != "Well" :
 				tempcode = val[self.__data.COL_WELL]
 				w = Well(code=tempcode)				#objet classe Well
@@ -119,6 +123,7 @@ class Boite(object):
 	dicoW=property(__getdicoWell, doc = "dictionnaire ...=")
 	nom =property(__getNom, doc = " ...=")
 	projet=property(__getProjet, __setProjet , doc = " ...=")
+	dicolignes=property(__getdicoLignes, doc=" ...= ") # renvoi le dictionnaire avec comme clé les n° des lignes du fichier labels.txt et comme valeur la liste des champs de la ligne, les titres en ligne 0 
 	
 
 # ****************************** Fin de la classe "Boite" ******************************		
@@ -130,7 +135,7 @@ if __name__ == "__main__" :
 	#boite=Boite("20130410_183703_374", "/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1")
 	print boite.genes[0:3]
 	print boite.conds[0:3]
-	print boite.dicoW.items()[0]
+	print boite.dicoW.items()[0:3]
 	#print boite.nom
 	#print boite.projet
 	#print Boite.PUITS_96()

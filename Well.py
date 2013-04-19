@@ -17,7 +17,7 @@ codecs.setDefaultEncoding('utf-8')
 
 import string
 
-
+from Data import Data
 
 # ------------------------ Début de la classe "Well" ------------------------
 
@@ -55,19 +55,18 @@ class Well():
 		self.__LC = lc
 		self.__code = code
 
-	def __getImagesPaths(self, projet, boite, puit) :
+	def getImagesPaths(self, projet, nomboite, codepuit) :
 		if projet != self.__projet : 
 			self.__data = Data(projet)
 			self.__projet = projet
-		if boite != self.__boite : 
-			self.__dicolignes = self.__data.dicolignes[boite]
-			self.__boite = boite
+		if nomboite != self.__boite : 
+			self.__dicolignes = self.__data.dicolignes[nomboite]
+			self.__boite = nomboite
 		
 		templist = []
 		for v in self.__dicolignes.values() :
-			if v[self.__data.COL_WELL] == puit :
-				templist.append(v[self.COL_FILENAME])
-
+			if v[self.__data.COL_WELL] == codepuit :
+				templist.append(os.path.join(self.__projet, self.__boite, v[self.__data.COL_FILENAME]))
 		return templist
 				
 		
@@ -83,7 +82,6 @@ class Well():
 
 	code = property(__getCode, setCode, doc="ma doc ... =")
 	LC = property(__getLC, setLC, doc="ma doc ... =")
-	imagespaths = property(__getImagesPaths, doc="liste des images d'un puits")
 
 
 print "--- debut ---"
@@ -94,6 +92,7 @@ if __name__ == "__main__" :
 	w=Well(lc=(1,12))
 	print w.code
 	print w.LC
+	print w.getImagesPaths("/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1", "20130410_162617_825", "A7") 
 
 
 #print calculerCode(lc=(2,5))

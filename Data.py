@@ -6,7 +6,6 @@ import os.path as path
 import getpass
 import re
 
-
 username=getpass.getuser()
 
 mypath=os.path.expanduser(os.path.join("~","Dropbox","Macros_Lisa","Code_VRD"))
@@ -14,7 +13,6 @@ sys.path.append(mypath)
 
 from org.python.core import codecs
 codecs.setDefaultEncoding('utf-8')
-
 
 #**************** Debut de la classe Data ******
 class Data(object):
@@ -284,8 +282,8 @@ class Data(object):
 	dicoG=property(__getdicoGene, doc="dictionnaire  ... =")  #renvoi un dictionnaire avec comme clé toutes les boites et en valeur tous les genes
 	dicoC=property(__getdicoCond, doc="dictionnaire ...=")    #renvoi un dictionnaire avec comme clé toutes les boites et en valeur tous les conditions
 	listB=property(__getlisteboites, doc="liste ...=")        #renvoi une liste avec toutes les boites du projet (= dossier)
-	dicoNumB=property(__getdicoNumBoite, doc="dictionnaire ...=") #renvoi un dictionnaire avec comme clé toutes les boites et en valeur les n° et les noms des boites
-	dicoNomB=property(__getdicoNomBoite, doc="dictionnaire ...=")	#renvoi un dictionnaire avec comme clé tous les n° des boites et en valeur les n° et les noms des boites
+	dicoNumB=property(__getdicoNumBoite, doc="dictionnaire ...=") #renvoi un dictionnaire avec comme clé toutes les noms des boites et en valeur le n° et le nom de la boite
+	dicoNomB=property(__getdicoNomBoite, doc="dictionnaire ...=")	#renvoi un dictionnaire avec comme clé tous les n° des boites et en valeur le n° et les noms des boites correspondant a ce n°
 	
 # **************** Fin de la classe Data *****************
 

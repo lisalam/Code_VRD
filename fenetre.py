@@ -44,6 +44,7 @@ from Boite import Boite
 from Data import Data
 from Well import Well
 
+
 from org.python.core import codecs
 codecs.setDefaultEncoding('utf-8')
 
