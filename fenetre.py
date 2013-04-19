@@ -40,10 +40,8 @@ from ListeCond import ListeCond
 from ListeWell import ListeWell
 from ListeNomB import ListeNomB
 from ListeNumB import ListeNumB
-from Boite import Boite
-from Data import Data
-from Well import Well
 
+from Controleur import Controleur
 
 from org.python.core import codecs
 codecs.setDefaultEncoding('utf-8')
@@ -64,6 +62,7 @@ class Fenetre(swing.JFrame):
 			self.__selNumb=[]
 			self.__selectdir = "/Users/lisalamasse/Dropbox/Macros_Lisa/ProjetVRD_Tools"
 			self.run()
+			self.__controleur = Controleur()
 
 		def run(self):
 			self.size = (1000, 400)
@@ -172,20 +171,15 @@ class Fenetre(swing.JFrame):
 			self.dispose()
 
 		def __viewWells(self, event):
-			# on genere une Boite avec les contenus des champs nom de boite et dossier
-			boite=self.__dispNomBoite.text
+
+			nomboite=self.__dispNomBoite.text
 			projet=self.__dispDossier.text
 
-			# on recupere le dicowell et on classe les cles et on cree une liste des valeurs classees
-			uneboite = Boite(boite, projet)
-			dicowell = uneboite.dicoW
+			
+			self.__controleur.setData(Projet = projet, Nom_Boite = nomboite)
 
-			listecles = dicowell.keys()
-			listecles.sort()
-			listevals = []
-			for cle in listecles : listevals.append("\t,\t".join([dicowell[cle][0].code, dicowell[cle][1], dicowell[cle][2]]))
-			# on affiche on utilasant ListeWell
-			p = ListeWell(listevals[0:-2])
+			templist=self.__controleur.viewWells(nomboite, projet)
+			p = ListeWell(templist)
 			p.show()
 
 		def __help(self, event):
