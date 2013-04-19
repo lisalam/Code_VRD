@@ -120,45 +120,104 @@ class Controleur(object):
 
 			if self.__dCode[self.__WELLS] : # si un puit et fourni on garde que l'intersection des ensembles
 
+				templistw = self.__getWelllists(self.__dicoDatas[self.__WELLS])
+
 				self.__dicoEnsEnd["Wells"]=set([str(self.__dicoDatas[self.__WELLS])])
 
-				tuplewell = self.__boite.dicoW[self.__dicoDatas[self.__WELLS]]
-				cond = tuplewell[1]
-				gene= tuplewell[2]
-				listimages = tuplewell[0].getImagesPaths(self.__dicoDatas[self.__PROJET], self.__dicoDatas[self.__NOM_BOITE], self.__dicoDatas[self.__WELLS])
-				enslistimages = set(listimages)
+				enslistimages = set(templistw[2])
 				self.__dicoEnsEnd["Images"] = self.__dicoEnsEnd["Images"].intersection(enslistimages)
 				#for v in self.__dicoEnsEnd["Images"] : print v
 				#print "-----"
 
+				self.__dicoEnsEnd["Genes"]=set(templistw[1])
+				self.__dicoEnsEnd["Condition"]=set(templistw[0])
+
+
+			if self.__dCode[self.__GENES] : 
+
+				dicoW = self.__boite.dicoW
+				gene = self.__dicoDatas[self.__GENES]
+				listecles = []
+
+				self.__dicoEnsEnd["Genes"]=set([str(self.__dicoDatas[self.__GENES])])
+				
+				for v in dicoW.values() :
+					if v[2] == gene : listecles.append(v[0].code)
+
+				self.__dicoEnsEnd["Wells"]=set()
+				self.__dicoEnsEnd["Images"]=set()
+				self.__dicoEnsEnd["Condition"]=set()
+
+				for code in listecles :
+					templistw = self.__getWelllists(code)
+
+					self.__dicoEnsEnd["Wells"]=self.__dicoEnsEnd["Wells"].union(set([str(code)]))
+
+					enslistimages = set(templistw[2])
+					self.__dicoEnsEnd["Images"] = self.__dicoEnsEnd["Images"].union(enslistimages)
+
+					
+					self.__dicoEnsEnd["Condition"]=self.__dicoEnsEnd["Condition"].union(set(templistw[0]))
+
+				print self.__dicoEnsEnd["Images"]
+
+			if self.__dCode[self.__IMAGES] : 
+
+				dicoW = self.__boite.dicoW
+				listecles = []
+				for v in dicoW.values() :
+					templistimg = self.__getWelllists(v[0].code)[2]
+					if self.__dicoDatas[self.__IMAGES] in templistimg : listecles.append(v[0].code)
+
+				self.__dicoEnsEnd["Wells"]=set()
+				self.__dicoEnsEnd["Genes"]=set()
+				self.__dicoEnsEnd["Condition"]=set()
+
+				for code in listecles :
+					templistw = self.__getWelllists(code)
+
+					self.__dicoEnsEnd["Wells"]=self.__dicoEnsEnd["Wells"].union(set([str(code)]))
+
+					self.__dicoEnsEnd["Genes"]=self.__dicoEnsEnd["Genes"].union(set([str(templistw[1])]))
+					
+					self.__dicoEnsEnd["Condition"]=self.__dicoEnsEnd["Condition"].union(set(templistw[0]))
+					
+				self.__dicoEnsEnd["Images"] = set([str(self.__dicoDatas[self.__IMAGES])])
+
+				print self.__dicoEnsEnd
+
 		return True
 
 	def viewWells(self, nomboite, projet):
-
-			
-			
 			# on recupere le dicowell et on classe les cles et on cree une liste des valeurs classees
 
-			if self.__boite == None : self.__boite = Boite(nomboite,  projet)
-			if nomboite != self.__dicoDatas[self.__NOM_BOITE] : self.__boite = Boite(nomboite,  projet)
+		if self.__boite == None : self.__boite = Boite(nomboite,  projet)
+		if nomboite != self.__dicoDatas[self.__NOM_BOITE] : self.__boite = Boite(nomboite,  projet)
 			
-			self.__boite = Boite(nomboite,  projet)
-			dicowell = self.__boite.dicoW
-			print "ok viewWells"
-			listecles = dicowell.keys()
-			listecles.sort()
-			listevals = []
-			for cle in listecles : listevals.append("\t,\t".join([dicowell[cle][0].code, dicowell[cle][1], dicowell[cle][2]]))
+		self.__boite = Boite(nomboite,  projet)
+		dicowell = self.__boite.dicoW
+		listecles = dicowell.keys()
+		listecles.sort()
+		listevals = []
+		for cle in listecles : listevals.append("\t,\t".join([dicowell[cle][0].code, dicowell[cle][1], dicowell[cle][2]]))
 
-			return listevals[0:-2]
+		return listevals[0:-2]
+
+	def __getWelllists(self, codewell) :
+		tuplewell = self.__boite.dicoW[codewell]
+		cond = [tuplewell[1]]
+		gene= [tuplewell[2]]
+		listimages = tuplewell[0].getImagesPaths(self.__dicoDatas[self.__PROJET], self.__dicoDatas[self.__NOM_BOITE], codewell)
+		return [cond, gene, listimages]
+		
 
 
 if __name__ == "__main__":
 
 	c = Controleur()
-	c.setData(Projet = "/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1", Nom_Boite = "20130410_162617_825", Wells="A7")
+	c.setData(Projet = "/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1", Nom_Boite = "20130410_162617_825", Wells = "A7", Images = "/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1/20130410_162617_825/Time00000_WellB03_Point0010_Seq0314.tif")
 	c.decisionTree()
-	c.viewWells("20130410_162617_825", "/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1")
+	#c.viewWells("20130410_162617_825", "/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1")
 	
 
 	
