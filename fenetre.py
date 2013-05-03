@@ -42,6 +42,7 @@ from ListeNomB import ListeNomB
 from ListeNumB import ListeNumB
 
 from Controleur import Controleur
+from FusionFenetres import FusionFenetres
 
 from org.python.core import codecs
 codecs.setDefaultEncoding('utf-8')
@@ -165,30 +166,51 @@ class Fenetre(swing.JFrame):
 
 			self.__controleur.decisionTree()
 			dicoEnsEnd = self.__controleur.dicoEnsEnd
-			
-			m = ListeCond(list(dicoEnsEnd["Condition"]))
-			m.show()
 
+			# ----------- AFFICHAGE PAR FENETRES SEPAREES ListeXXX.py --------#
+			
+			#m = ListeCond(list(dicoEnsEnd["Condition"]))
+			#m.show()
+
+			#templist=list(dicoEnsEnd["Wells"])
+			#templist.sort()
+			
+			#p = ListeWell(templist)
+			#p.show()
+			
+			#w = ListeNomB(list(dicoEnsEnd["Nom_Boite"]))
+			#w.show()
+			
+			#x = ListeNumB(list(dicoEnsEnd["Num_Boite"]))
+			#x.show()
+
+			#templist=list(dicoEnsEnd["Genes"])
+			#templist.sort()
+			#q = ListeGene(templist)
+			#q.show()
+
+			#v = ListeImage(list(dicoEnsEnd["Images"]))
+			#v.show()
+			# --------------------------------------------------------------#
+
+			dicolistes=dict()
 			templist=list(dicoEnsEnd["Wells"])
 			templist.sort()
-			
-			p = ListeWell(templist)
-			p.show()
-			
-			w = ListeNomB(list(dicoEnsEnd["Nom_Boite"]))
-			w.show()
-			
-			x = ListeNumB(list(dicoEnsEnd["Num_Boite"]))
-			x.show()
-
+			dicolistes["Wells"]=templist
 			templist=list(dicoEnsEnd["Genes"])
 			templist.sort()
-			q = ListeGene(templist)
-			q.show()
+			dicolistes["Genes"]=templist
+			templist=list(dicoEnsEnd["Num_Boite"])
+			dicolistes["Num_Boite"]=templist
+			templist=list(dicoEnsEnd["Nom_Boite"])
+			dicolistes["Nom_Boite"]=templist
+			templist=list(dicoEnsEnd["Condition"])
+			dicolistes["Condition"]=templist
+			templist=list(dicoEnsEnd["Images"])
+			dicolistes["Images"]=templist			
 
-			v = ListeImage(list(dicoEnsEnd["Images"]))
-			v.show()
-			
+			ff = FusionFenetres(dicolistes)
+			ff.show()
 
 		def __close(self, event):
 			time.sleep(0.01) 
