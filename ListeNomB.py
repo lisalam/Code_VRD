@@ -92,6 +92,8 @@ if __name__ == "__main__":
 	
 
 	listnomb=[nom1,nom2,nom3,nom4]
+	ens=set()
+	listnomb=list(ens)
 	
 	nomb = ListeNomB(listnomb)
 	nomb.show()

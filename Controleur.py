@@ -47,10 +47,11 @@ class Controleur(object):
 		self.__dicoEns = dict()
 
 		self.__dicoEnsEnd = dict()
+		for key in self.__KEYS : self.__dicoEnsEnd[key] = set()
 
 		self.__boite = None
 
-	def setData(self, **param) : 
+	def setData(self, param) : 
 		# tests dict ok...
 		#if len(param) <3 : return False
 		for v in param.keys() :
@@ -99,8 +100,9 @@ class Controleur(object):
 			#print self.__dicoEnsEnd["Genes"]
 
 			# -4-  on cree l'ensemble des Wells de la boite:
-			values = [v[0] for v in self.__boite.dicoW.values() if v[1] != "NA"]
-			self.__dicoEnsEnd["Wells"] = set(values)
+			values = [v[0].code for v in self.__boite.dicoW.values() if v[1] != "NA"]
+			values.sort()
+			self.__dicoEnsEnd["Wells"] = set(values[:-2])
 
 			#for w in self.__dicoEnsEnd["Wells"] : print w.code
 
@@ -113,6 +115,7 @@ class Controleur(object):
 			templistpaths=[]
 			for i in range(1, len(self.__boite.dicolignes)):
 				templistpaths.append(os.path.join(self.__dicoDatas[self.__PROJET], self.__dicoDatas[self.__NOM_BOITE], self.__boite.dicolignes[i][self.__data.COL_FILENAME]))
+
 			self.__dicoEnsEnd["Images"]=set(templistpaths)
 
 			#for v in self.__dicoEnsEnd["Images"] : print v
@@ -186,6 +189,45 @@ class Controleur(object):
 
 				#print self.__dicoEnsEnd
 
+		else :
+			# on teste si le projet est toujours le meme :
+			if self.__projet != self.__dicoDatas[self.__PROJET] : self.__data = Data(self.__dicoDatas[self.__PROJET])
+			self.__dicoEnsEnd["Nom_Boite"] = set(self.__data.listB)
+
+			# si on a seulement le projet et un gene :
+			if self.__dCode[self.__GENES] : 
+				gene = self.__dicoDatas[self.__GENES]
+				templistboites = []
+				for nomboite in self.__data.listB :
+					boite = Boite(nomboite,  self.__dicoDatas[self.__PROJET])
+					if gene in boite.genes : 
+						templistboites.append(nomboite)
+						self.__dicoEnsEnd["Condition"]=self.__dicoEnsEnd["Condition"].union(set(boite.conds))
+						nb = self.__data.dicoNumB[nomboite][0]
+						self.__dicoEnsEnd["Num_Boite"]=self.__dicoEnsEnd["Num_Boite"].union(set([str(nb)]))
+
+				self.__dicoEnsEnd["Nom_Boite"] = self.__dicoEnsEnd["Nom_Boite"].intersection(set(templistboites))
+				self.__dicoEnsEnd["Genes"] = set([str(gene)])
+				
+
+			
+			if self.__dCode[self.__CONDS] :
+				cond = self.__dicoDatas[self.__CONDS]
+				templistconds = []
+				for nomboite in self.__data.listB :
+					boite = Boite(nomboite,  self.__dicoDatas[self.__PROJET])
+					if cond in boite.conds :  
+						templistconds.append(nomboite)
+						self.__dicoEnsEnd["Genes"]=self.__dicoEnsEnd["Genes"].union(set(boite.genes))
+						nb = self.__data.dicoNumB[nomboite][0]
+						self.__dicoEnsEnd["Num_Boite"]=self.__dicoEnsEnd["Num_Boite"].union(set([str(nb)]))
+
+				self.__dicoEnsEnd["Nom_Boite"] = self.__dicoEnsEnd["Nom_Boite"].intersection(set(templistconds))
+				self.__dicoEnsEnd["Condition"] = set([str(cond)])
+
+			
+			
+
 		return True
 
 	def viewWells(self, nomboite, projet):
@@ -217,7 +259,11 @@ class Controleur(object):
 if __name__ == "__main__":
 
 	c = Controleur()
-	c.setData(Projet = "/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1", Nom_Boite = "20130410_162617_825", Wells = "A7")
+	param=dict()
+	param["Projet"]="/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1"
+	param["Nom_Boite"] = "20130410_162617_825"
+	param["Wells"]="A7"
+	c.setData(param)
 	c.decisionTree()
 	print c.dicoEnsEnd
 	#c.viewWells("20130410_162617_825", "/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1")

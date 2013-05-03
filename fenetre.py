@@ -152,13 +152,27 @@ class Fenetre(swing.JFrame):
 
 		def __generate(self, event):
 
-			self.__controleur.setData(Projet = self.__dispDossier.text, Nom_Boite = self.__dispNomBoite.text, Wells = self.__dispWell.text)
+			param=dict()
+
+			if self.__dispDossier.text != "" : param["Projet"] = self.__dispDossier.text
+			if self.__dispNomBoite.text != "" : param["Nom_Boite"] = self.__dispNomBoite.text
+			if self.__dispWell.text != "" : param["Wells"] = self.__dispWell.text
+			if self.__dispGene.text != "" : param["Genes"] = self.__dispGene.text
+			if self.__dispCond.text != "" : param["Condition"] = self.__dispCond.text
+			if self.__dispImage.text != "" : param["Images"] = self.__dispImage.text
+
+			self.__controleur.setData(param)
+
 			self.__controleur.decisionTree()
 			dicoEnsEnd = self.__controleur.dicoEnsEnd
 			
 			m = ListeCond(list(dicoEnsEnd["Condition"]))
 			m.show()
-			p = ListeWell(list(dicoEnsEnd["Wells"]))
+
+			templist=list(dicoEnsEnd["Wells"])
+			templist.sort()
+			
+			p = ListeWell(templist)
 			p.show()
 			
 			w = ListeNomB(list(dicoEnsEnd["Nom_Boite"]))
@@ -166,19 +180,14 @@ class Fenetre(swing.JFrame):
 			
 			x = ListeNumB(list(dicoEnsEnd["Num_Boite"]))
 			x.show()
-			
-			q = ListeGene(list(dicoEnsEnd["Genes"]))
+
+			templist=list(dicoEnsEnd["Genes"])
+			templist.sort()
+			q = ListeGene(templist)
 			q.show()
 
-			listimp = []
-			
-			for v in dicoEnsEnd["Images"] :
-				imp = ImagePlus(v)
-				listimp.append(imp)
-
-			v = ListeImage(listimp)
+			v = ListeImage(list(dicoEnsEnd["Images"]))
 			v.show()
-			
 			
 
 		def __close(self, event):
@@ -190,8 +199,10 @@ class Fenetre(swing.JFrame):
 			nomboite=self.__dispNomBoite.text
 			projet=self.__dispDossier.text
 
-			
-			self.__controleur.setData(Projet = projet, Nom_Boite = nomboite)
+			tempdict = dict()
+			tempdict["Projet"] = projet
+			tempdict["Nom_Boite"] = nomboite			
+			self.__controleur.setData(tempdict)
 
 			templist=self.__controleur.viewWells(nomboite, projet)
 			p = ListeWell(templist)

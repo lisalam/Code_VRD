@@ -19,6 +19,8 @@ import shutil
 import random
 import math
 
+from ij import ImageStack, ImagePlus, IJ, WindowManager
+
 username=getpass.getuser()
 
 mypath=os.path.expanduser(os.path.join("~","Dropbox","Macros_Lisa","Code_VRD"))
@@ -30,10 +32,16 @@ codecs.setDefaultEncoding('utf-8')
 
 class ListeImage(swing.JFrame):
 
-		def __init__(self, listimp):
+		def __init__(self, listpaths):
+			self.__listpaths = listpaths
+			self.__listimp = []
+			for v in listpaths :
+				print v
+				imp = ImagePlus(v)
+				print imp.getTitle()
+				self.__listimp.append(imp)
 			swing.JFrame.__init__(self, title="Images")
 			self.setDefaultCloseOperation(swing.JFrame.DISPOSE_ON_CLOSE)
-			self.__listimp = listimp
 			self.run()
 
 		def run(self):
