@@ -162,7 +162,7 @@ class Controleur(object):
 					
 					self.__dicoEnsEnd["Condition"]=self.__dicoEnsEnd["Condition"].union(set(templistw[0]))
 
-				print self.__dicoEnsEnd["Images"]
+				#print self.__dicoEnsEnd["Images"]
 
 			if self.__dCode[self.__IMAGES] : 
 
@@ -187,7 +187,6 @@ class Controleur(object):
 					
 				self.__dicoEnsEnd["Images"] = set([str(self.__dicoDatas[self.__IMAGES])])
 
-				#print self.__dicoEnsEnd
 
 		else :
 			# on teste si le projet est toujours le meme :
@@ -225,9 +224,14 @@ class Controleur(object):
 				self.__dicoEnsEnd["Nom_Boite"] = self.__dicoEnsEnd["Nom_Boite"].intersection(set(templistconds))
 				self.__dicoEnsEnd["Condition"] = set([str(cond)])
 
-			
-			
 
+			for nomboite in self.__dicoEnsEnd["Nom_Boite"]:
+				boite = Boite(nomboite,  self.__dicoDatas[self.__PROJET])
+				templistpaths=[]
+				for i in range(1, len(boite.dicolignes)):
+					templistpaths.append(os.path.join(self.__dicoDatas[self.__PROJET], nomboite, boite.dicolignes[i][self.__data.COL_FILENAME]))
+			self.__dicoEnsEnd["Images"]=set(templistpaths)
+			
 		return True
 
 	def viewWells(self, nomboite, projet):

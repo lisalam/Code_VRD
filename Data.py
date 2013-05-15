@@ -51,6 +51,9 @@ class Data(object):
 		if self.__getdicoGene() == "erreur dossiers" : return "erreur dossiers"
 		else : self.__dicoGene = self.__getdicoGene()
 
+		if self.__getdicoCond() == "erreur dossiers" : return "erreur dossiers"
+		else : self.__dicoCond = self.__getdicoCond()
+
 		if self.__getdicoNumBoite() == "erreur dossiers" : return "erreur dossiers"
 		else : self.__dicoNumBoite = self.__getdicoNumBoite()
 
@@ -68,9 +71,7 @@ class Data(object):
 
 
 	def __getdicoCond(self): 
-		
-		self.__flagdicoGene = 1
-		
+		self.__flagdicoCond = 1
 		tempdico=dict()
 		for b in self.__listeboites :
 			dicolignes = self.dicolignes[b] # recupere le dictionnaire pour la boite avec ttes les lignes du fichier texte
@@ -273,14 +274,15 @@ class Data(object):
 		return self.__dicoGene
 
 	def __createDicoC(self) :
+		print "flag", self.__flagdicoCond
 		if self.__flagdicoCond == 0 : self.__getdicoCond()
 		return self.__dicoCond
 
 
 # -------- propriétés de la classe Data --------
 
-	dicoG=property(__getdicoGene, doc="dictionnaire  ... =")  #renvoi un dictionnaire avec comme clé toutes les boites et en valeur tous les genes
-	dicoC=property(__getdicoCond, doc="dictionnaire ...=")    #renvoi un dictionnaire avec comme clé toutes les boites et en valeur tous les conditions
+	dicoG=property(__createDicoG, doc="dictionnaire  ... =")  #renvoi un dictionnaire avec comme clé toutes les boites et en valeur tous les genes
+	dicoC=property(__createDicoC, doc="dictionnaire ...=")    #renvoi un dictionnaire avec comme clé toutes les boites et en valeur tous les conditions
 	listB=property(__getlisteboites, doc="liste ...=")        #renvoi une liste avec toutes les boites du projet (= dossier)
 	dicoNumB=property(__getdicoNumBoite, doc="dictionnaire ...=") #renvoi un dictionnaire avec comme clé toutes les noms des boites et en valeur le n° et le nom de la boite
 	dicoNomB=property(__getdicoNomBoite, doc="dictionnaire ...=")	#renvoi un dictionnaire avec comme clé tous les n° des boites et en valeur le n° et les noms des boites correspondant a ce n°
@@ -294,10 +296,16 @@ class Data(object):
 
 if __name__ == "__main__" :
 	data=Data("/Users/lisalamasse/Desktop/Metasensors HCS/Bacillus_Ibidi_96well_angio1")
-	#print "dicoG", data.dicoG
-	#print "----- fin dicoG -----"
-	#print data.dicoC
-	#print "----- fin dicoC -----"
+	print data.dicoG
+	print "----- fin dicoG -----"
+	print data.dicoC
+	print "----- fin dicoC -----"
+
+	print data.dicoG
+	print "----- fin dicoG -----"
+	print data.dicoC
+	print "----- fin dicoC -----"
+
 	#print data.listB
 	#print "----- fin listB -----"
 	#print data.dicoNumB
